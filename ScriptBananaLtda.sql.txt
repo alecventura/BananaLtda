@@ -1,0 +1,63 @@
+CREATE TABLE `bananaltda`.`branch` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(90) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  UNIQUE INDEX `name_UNIQUE` (`name` ASC));
+
+
+CREATE TABLE `bananaltda`.`room` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `branch_fk` INT NULL,
+  `name` VARCHAR(90) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  INDEX `branch_fk_idx` (`branch_fk` ASC),
+  CONSTRAINT `branch_fk`
+    FOREIGN KEY (`branch_fk`)
+    REFERENCES `bananaltda`.`branch` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
+
+CREATE TABLE `bananaltda`.`booking` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `branch_fk` INT NOT NULL,
+  `room_fk` INT NOT NULL,
+  `startDate` DATETIME NOT NULL,
+  `endDate` DATETIME NOT NULL,
+  `responsable` VARCHAR(45) NOT NULL,
+  `description` VARCHAR(200) NOT NULL,
+  `coffee` INT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  INDEX `branch_fk_idx` (`branch_fk` ASC),
+  INDEX `room_fk_idx` (`room_fk` ASC),
+  CONSTRAINT `booking_branch_fk`
+    FOREIGN KEY (`branch_fk`)
+    REFERENCES `bananaltda`.`branch` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `booking_room_fk`
+    FOREIGN KEY (`room_fk`)
+    REFERENCES `bananaltda`.`room` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

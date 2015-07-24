@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Banana Ltda Room Booking</h1>
+    <p class="lead">Welcome to banana room booking app.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Book a room</h2>
+        <p>In calendar you can choose when you want to reserve a room.</p>
+        <p>@Html.ActionLink("Booking", "Book", "Home")</p>
+    </div>
+    <div class="col-md-6">
+        <h2>List all reserves</h2>
+        <p>List or search for a reserve.</p>
+        <p>@Html.ActionLink("Calendar", "Calendar", "Home")</p>
+    </div>
+</div>

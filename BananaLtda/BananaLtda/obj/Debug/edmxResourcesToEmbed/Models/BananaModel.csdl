@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="bananaltdaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="booking">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="branch_fk" Type="Int32" Nullable="false" />
+    <Property Name="room_fk" Type="Int32" Nullable="false" />
+    <Property Name="startDate" Type="DateTime" Nullable="false" />
+    <Property Name="endDate" Type="DateTime" Nullable="false" />
+    <Property Name="responsable" Type="String" MaxLength="45" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="coffee" Type="Int32" />
+    <NavigationProperty Name="branch" Relationship="Self.booking_branch_fk" FromRole="booking" ToRole="branch" />
+    <NavigationProperty Name="room" Relationship="Self.booking_room_fk" FromRole="booking" ToRole="room" />
+  </EntityType>
+  <EntityType Name="branch">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="90" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="bookings" Relationship="Self.booking_branch_fk" FromRole="branch" ToRole="booking" />
+    <NavigationProperty Name="rooms" Relationship="Self.branch_fk" FromRole="branch" ToRole="room" />
+  </EntityType>
+  <EntityType Name="room">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="branch_fk" Type="Int32" />
+    <Property Name="name" Type="String" MaxLength="90" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="bookings" Relationship="Self.booking_room_fk" FromRole="room" ToRole="booking" />
+    <NavigationProperty Name="branch" Relationship="Self.branch_fk" FromRole="room" ToRole="branch" />
+  </EntityType>
+  <Association Name="booking_branch_fk">
+    <End Role="branch" Type="Self.branch" Multiplicity="1" />
+    <End Role="booking" Type="Self.booking" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="branch">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="booking">
+        <PropertyRef Name="branch_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="booking_room_fk">
+    <End Role="room" Type="Self.room" Multiplicity="1" />
+    <End Role="booking" Type="Self.booking" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="room">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="booking">
+        <PropertyRef Name="room_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="branch_fk">
+    <End Role="branch" Type="Self.branch" Multiplicity="0..1" />
+    <End Role="room" Type="Self.room" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="branch">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="room">
+        <PropertyRef Name="branch_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="bananaltdaEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="bookings" EntityType="Self.booking" />
+    <EntitySet Name="branches" EntityType="Self.branch" />
+    <EntitySet Name="rooms" EntityType="Self.room" />
+    <AssociationSet Name="booking_branch_fk" Association="Self.booking_branch_fk">
+      <End Role="branch" EntitySet="branches" />
+      <End Role="booking" EntitySet="bookings" />
+    </AssociationSet>
+    <AssociationSet Name="booking_room_fk" Association="Self.booking_room_fk">
+      <End Role="room" EntitySet="rooms" />
+      <End Role="booking" EntitySet="bookings" />
+    </AssociationSet>
+    <AssociationSet Name="branch_fk" Association="Self.branch_fk">
+      <End Role="branch" EntitySet="branches" />
+      <End Role="room" EntitySet="rooms" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
