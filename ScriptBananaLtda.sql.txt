@@ -47,7 +47,23 @@ CREATE TABLE `bananaltda`.`booking` (
 
 
 
+insert into branch (name) values ("Matriz"),("Filial_1"),("Filial_2"),("Filial_3"),("Filial_4"),("Filial_5");
 
+insert into room (name, branch_fk) value ("Sala_1", (select id from branch where name="Matriz"));
+insert into room (name, branch_fk) value ("Sala_2", (select id from branch where name="Matriz"));
+insert into room (name, branch_fk) value ("Sala_3", (select id from branch where name="Matriz"));
+
+insert into room (name, branch_fk) value ("Sala_1", (select id from branch where name="Filial_1"));
+insert into room (name, branch_fk) value ("Sala_2", (select id from branch where name="Filial_1"));
+
+insert into room (name, branch_fk) value ("Sala_Principal", (select id from branch where name="Filial_2"));
+insert into room (name, branch_fk) value ("Sala_Pequena", (select id from branch where name="Filial_2"));
+
+insert into room (name, branch_fk) value ("Sala_1", (select id from branch where name="Filial_3"));
+
+insert into room (name, branch_fk) value ("Sala_Reuniao", (select id from branch where name="Filial_4"));
+
+insert into room (name, branch_fk) value ("Sala_Reuniao", (select id from branch where name="Filial_5"));
 
 
 

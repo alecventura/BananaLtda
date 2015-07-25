@@ -8,9 +8,102 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Book</title>
+    @section scripts{
+        <script src="~/Views/Home/book.js"></script>
+    }
 </head>
 <body>
-    <div>
+    <div class="row" id="books-content">
+        <div class="col-xs-10 col-xs-offset-1" style="margin-top: 10px;">
+            <button type="button" class="btn btn-primary" data-bind="toggle: isVisible">Reserve a room</button>
+        </div>
+
+        <div class="col-xs-10 col-xs-offset-1">
+            <h2 style="text-align: center;">Reservations</h2>
+
+            <div data-bind="visible:$root.reservations() == null || $root.reservations().length == 0 ">
+                <p>There is no reservation registered</p>
+            </div>
+
+            <div data-bind="visible: $root.reservations() != null && $root.reservations().length > 0">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Branch
+                            </th>
+                            <th>
+                                Room
+                            </th>
+                            <th>
+                                Start Time
+                            </th>
+                            <th>
+                                End Time
+                            </th>
+                            <th>
+                                Responsable
+                            </th>
+                            <th>
+                                Number of coffees asked
+                            </th>
+                            <th style="text-align: center;">
+                                Cancel
+                            </th>
+
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: reservations">
+                        <tr>
+                            <td data-bind="text: $data.branchName"></td>
+                            <td data-bind="text: $data.roomName"></td>
+                            <td data-bind="text: $data.startDate"></td>
+                            <td data-bind="text: $data.endDate"></td>
+                            <td data-bind="text: $data.responsable"></td>
+                            <td data-bind="text: $data.coffee"></td>
+                            <td style="text-align: center;">
+                                <a href="#" data-bind="click: $root.onCancelClicked"><i class="glyphicon glyphicon-download-alt"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div id="pager-reservations" class="pager"></div>
+            </div>
+        </div>
+
+
+        <div class="modal" data-bind="isVisible: $data.isVisible" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-bind="toggle: isVisible" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Create Reservation</h4>
+                    </div>
+                    <div class="modal-body" data-bind="with: objModal">
+                        <div class="form-group margin-bottom20">
+                            <label class="control-label label-centralized col-lg-4">Branch:</label>
+                            <select class="select-nice col-lg-8" data-bind="options: $root.branches, optionsValue:'id', optionsText: 'name',value: branch_fk, optionsCaption: 'Choose a Branch'"></select>
+                        </div>
+                        <br />
+                        <div class="form-group margin-bottom20">
+                            <label class="control-label label-centralized col-lg-4">Room:</label>
+                            <select class="select-nice col-lg-8" data-bind="disable: !$root.hasSelectedBranch(), options: $root.linkedRooms, optionsValue:'id', optionsText: 'name',value: room_fk, optionsCaption: 'Choose a Room'"></select>
+                        </div>
+                        <br />
+                        <div class="form-group margin-bottom20">
+                            <label class="control-label label-centralized col-lg-4">Responsible:</label>
+                            <input class="input-nice col-lg-8" type="text" data-bind="value: responsible" />
+                        </div>
+                        <br />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-bind="toggle: $root.isVisible">Close</button>
+                        <button type="button" class="btn btn-primary" data-bind="click: $root.onSaveClicked">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </body>
 </html>

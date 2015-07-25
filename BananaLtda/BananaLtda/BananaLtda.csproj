@@ -119,7 +119,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BookController.cs" />
+    <Compile Include="Controllers\BranchesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RoomsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -144,6 +146,8 @@
     <Compile Include="Models\branch.cs">
       <DependentUpon>BananaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\JSONs\Branch.cs" />
+    <Compile Include="Models\JSONs\Room.cs" />
     <Compile Include="Models\room.cs">
       <DependentUpon>BananaModel.tt</DependentUpon>
     </Compile>
@@ -152,6 +156,11 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\default.css" />
+    <Content Include="Content\default.date.css" />
+    <Content Include="Content\default.time.css" />
+    <Content Include="Content\toastr.css" />
+    <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -175,6 +184,8 @@
       <DependentUpon>BananaModel.edmx</DependentUpon>
       <LastGenOutput>BananaModel.cs</LastGenOutput>
     </Content>
+    <Content Include="Content\toastr.scss" />
+    <Content Include="Content\toastr.less" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -183,11 +194,31 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\knockout-2.0.0.debug.js" />
+    <Content Include="Scripts\knockout-2.0.0.js" />
     <Content Include="Scripts\knockout-3.3.0.debug.js" />
+    <Content Include="Scripts\knockout-bindings-allowBindings.js" />
+    <Content Include="Scripts\knockout-bindings-modal.js" />
+    <Content Include="Scripts\knockout-bindings-pickadate.js" />
+    <Content Include="Scripts\knockout-bindings-stopBinding.js" />
+    <Content Include="Scripts\knockout-bindings-toggle.js" />
+    <Content Include="Scripts\knockout-withComponent.js" />
+    <Content Include="Scripts\knockout.mapping-latest.debug.js" />
+    <Content Include="Scripts\knockout.mapping-latest.js" />
+    <Content Include="Scripts\legacy.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\picker.date.js" />
+    <Content Include="Scripts\picker.js" />
+    <Content Include="Scripts\picker.time.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\toastr.js" />
+    <Content Include="Scripts\toastr.min.js" />
+    <Content Include="Scripts\underscore.js" />
+    <Content Include="Scripts\underscore.min.js" />
+    <Content Include="Scripts\utils.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Home\book.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -205,10 +236,13 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Home\Book.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
+    <Content Include="Scripts\underscore.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Branches\" />
     <Folder Include="Views\List\" />
+    <Folder Include="Views\Rooms\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

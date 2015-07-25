@@ -5,17 +5,16 @@ namespace BananaLtda
 {
     public class BundleConfig
     {
-        // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
+
         public static void RegisterBundles(BundleCollection bundles)
         {
+            // Scripts que vão ser incluidos em todas as paginas (eles são incluidos no _Layout.cshtml)
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
-            // Use the development version of Modernizr to develop with and learn from. Then, when you're
-            // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
@@ -25,10 +24,38 @@ namespace BananaLtda
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/default.css",
+                      "~/Content/default.date.css",
+                      "~/Content/default.time.css",
+                      "~/Content/toastr.min.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
-                      "~/Scripts/knockout-3.3.0.debug.js"));
+                      "~/Scripts/knockout-3.3.0.debug.js", "~/Scripts/knockout.mapping-latest.debug.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/knockoutCustomBindings").Include(
+                      "~/Scripts/knockout-bindings-allowBindings.js",
+                      "~/Scripts/knockout-bindings-modal.js",
+                      "~/Scripts/knockout-bindings-pickadate.js",
+                      "~/Scripts/knockout-bindings-stopBinding.js",
+                      "~/Scripts/knockout-bindings-toggle.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/underscore").Include(
+                      "~/Scripts/underscore.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/pickadate").Include(
+                      "~/Scripts/legacy.js",
+                      "~/Scripts/picker.js",
+                      "~/Scripts/picker.date.js",
+                      "~/Scripts/picker.time.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/toastr").Include(
+                      "~/Scripts/toastr.min.js"));
+
+            // Scripts especificos de cada pagina:
+
+            bundles.Add(new ScriptBundle("~/bundles/book").Include(
+                      "~/View/Home/book.js"));
         }
     }
 }
