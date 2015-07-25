@@ -82,17 +82,31 @@
                     <div class="modal-body" data-bind="with: objModal">
                         <div class="form-group margin-bottom20">
                             <label class="control-label label-centralized col-lg-4">Branch:</label>
-                            <select class="select-nice col-lg-8" data-bind="options: $root.branches, optionsValue:'id', optionsText: 'name',value: branch_fk, optionsCaption: 'Choose a Branch'"></select>
+                            <select id="branch_fk" class="select-nice col-lg-8" data-bind="options: $root.branches, optionsValue:'id', optionsText: 'name',value: branch_fk, optionsCaption: 'Choose a Branch'"></select>
                         </div>
                         <br />
                         <div class="form-group margin-bottom20">
                             <label class="control-label label-centralized col-lg-4">Room:</label>
-                            <select class="select-nice col-lg-8" data-bind="disable: !$root.hasSelectedBranch(), options: $root.linkedRooms, optionsValue:'id', optionsText: 'name',value: room_fk, optionsCaption: 'Choose a Room'"></select>
+                            <select id="room_fk" class="select-nice col-lg-8" data-bind="disable: !$root.hasSelectedBranch(), options: $root.linkedRooms, optionsValue:'id', optionsText: 'name',value: room_fk, optionsCaption: 'Choose a Room'"></select>
+                        </div>
+
+                        <br />
+                        <div class="form-group margin-bottom20">
+                            <label class="control-label label-centralized col-lg-4">Start date and time:</label>
+                            <input id="startdate" class="input-nice col-lg-4" type="text" data-bind="pickadate: startdate, pickadateOptions:{container: 'body'}" />
+                            <input id="starttime" class="input-nice col-lg-4" type="text" data-bind="pickatime: starttime, pickatimeOptions:{container: 'body'}" />
                         </div>
                         <br />
                         <div class="form-group margin-bottom20">
+                            <label class="control-label label-centralized col-lg-4">End date and time:</label>
+                            <input id="enddate" class="input-nice col-lg-4" type="text" data-bind="pickadate: enddate, pickadateOptions:{container: 'body'}" />
+                            <input id="endtime" class="input-nice col-lg-4" type="text" data-bind="pickatime: endtime, pickatimeOptions:{container: 'body'}" />
+                        </div>
+
+                        <br />
+                        <div class="form-group margin-bottom20">
                             <label class="control-label label-centralized col-lg-4">Responsible:</label>
-                            <input class="input-nice col-lg-8" type="text" data-bind="value: responsible" />
+                            <input id="responsable" class="input-nice col-lg-8" type="text" data-bind="value: responsible" />
                         </div>
                         <br />
                     </div>

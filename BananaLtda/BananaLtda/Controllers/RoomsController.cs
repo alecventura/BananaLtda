@@ -17,7 +17,7 @@ namespace BananaLtda.Controllers
 
         // Web Services para retornar a lista de salas
         // GET: Rooms
-        public JsonResult GetRooms()
+        public JsonResult GetList()
         {
             //var rooms = db.rooms.Include(r => r.branch);
 
@@ -26,18 +26,9 @@ namespace BananaLtda.Controllers
 
             foreach (var item in roomsFromModel)
             {
-                roomsJSON.Add(mapToJSON(item));
+                roomsJSON.Add(Room.mapToJSON(item));
             }
             return Json(roomsJSON, JsonRequestBehavior.AllowGet);
-        }
-
-        private Room mapToJSON(room item)
-        {
-            Room json = new Room();
-            json.id = item.id;
-            json.name = item.name;
-            json.branch_fk = (int)item.branch_fk;
-            return json;
         }
 
         // Abaixo tem os outros Web Services criados pelo framework MVC, que foram comentados pois não nos interessa neste momento criar ou editar novas branches pela App,

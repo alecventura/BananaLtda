@@ -1,4 +1,13 @@
-﻿var newReservation = { 'branch_fk': null, 'room_fk': null, 'responsible': null, 'id': -1 }
+﻿var newReservation = {
+    'branch_fk': -1,
+    'room_fk': -1,
+    'startdate': "2015-04-27T03:00:00.000Z",
+    'enddate': "2015-04-27T03:00:00.000Z",
+    'starttime': 0,  //Armazena a hora em minutos a partir da meia noite (Ex: meia noite é 0 minutos, meia noite e meia é 30min e por ai vai).
+    'endtime': 0,
+    'responsible': "",
+    'id': -1
+}
 var request = { 'limit': 10, 'offset': 0 }
 
 function BookViewModel() {
@@ -63,15 +72,25 @@ function BookViewModel() {
     self.onSaveClicked = function () {
         $.ajax({
             type: "POST",
-            url: "Machines.aspx/saveMachine",
+            url: "/Book/Create",
             contentType: "application/json; charset=utf-8",
-            data: '{machine: ' + JSON.stringify(ko.mapping.toJS(self.objModal)) + '}',
+            data: JSON.stringify(ko.mapping.toJS(self.objModal)),
             dataType: 'json',
             success: function (response) {
-                self.search(0, false);
-                self.isVisible(false);
-                $('.modal-backdrop').remove();
-                toastr.success("Machine successfully saved!");
+                if (response.status != null) {
+                    if (response.status == 400) {
+                        _.each(response.validationErrors, function (item) {
+                            utils.handleValidationError(item);
+                        })
+                    } else {
+                        toastr.warning(response.message)
+                    }
+                } else {
+                    self.search(0, false);
+                    self.isVisible(false);
+                    $('.modal-backdrop').remove();
+                    toastr.success("Reservation successfully created!");
+                }
             },
             failure: function (response) {
                 alert(response);
@@ -85,12 +104,12 @@ function BookViewModel() {
     self.findBookings = (function () {
         return function (offset, showmessage) {
             self.request().offset(offset);
-            return utils.postJSON("Machines.aspx/searchMachines", self.mountRequest(), function (data) {
+            return utils.postJSON("/Book/GetList", self.mountRequest(), function (data) {
                 data = data.d;
                 self.request().offset(data.offset);
                 if (data.total === 0) {
                     if (showmessage) {
-                        toastr.success("No machine found!");
+                        toastr.success("No reservation found!");
                     }
                     self.machines([]);
                 } else {
@@ -126,7 +145,7 @@ function BookViewModel() {
     self.loadBranches = function () {
         $.ajax({
             type: "GET",
-            url: "/Branches/GetBranches",
+            url: "/Branches/GetList",
             dataType: 'json',
             success: function (response) {
                 self.branches(response);
@@ -143,7 +162,7 @@ function BookViewModel() {
     self.loadRooms = function () {
         $.ajax({
             type: "GET",
-            url: "/Rooms/GetRooms",
+            url: "/Rooms/GetList",
             dataType: 'json',
             success: function (response) {
                 self.rooms(response);

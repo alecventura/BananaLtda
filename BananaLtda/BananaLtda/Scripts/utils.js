@@ -2,6 +2,15 @@
   indexOf = [].indexOf || function (item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 function utils() { }
+
+utils.handleValidationError = function (item) {
+    var element = $("." + item.path);
+    var parent = element.parent();
+    element.addClass(".alert");
+    parent.addClass(".alert");
+    parent.add("<p>" + item.error + "</p>");
+};
+
 utils.postJSON = function (path, data, callback) {
     return $.ajax({
         type: 'POST',

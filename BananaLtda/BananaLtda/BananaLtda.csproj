@@ -118,10 +118,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\Answer.cs" />
     <Compile Include="Controllers\BookController.cs" />
     <Compile Include="Controllers\BranchesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RoomsController.cs" />
+    <Compile Include="Controllers\ValidationError.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -147,6 +149,7 @@
       <DependentUpon>BananaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\JSONs\Branch.cs" />
+    <Compile Include="Models\JSONs\Reservation.cs" />
     <Compile Include="Models\JSONs\Room.cs" />
     <Compile Include="Models\room.cs">
       <DependentUpon>BananaModel.tt</DependentUpon>
@@ -200,6 +203,7 @@
     <Content Include="Scripts\knockout-bindings-allowBindings.js" />
     <Content Include="Scripts\knockout-bindings-modal.js" />
     <Content Include="Scripts\knockout-bindings-pickadate.js" />
+    <Content Include="Scripts\knockout-bindings-pickatime.js" />
     <Content Include="Scripts\knockout-bindings-stopBinding.js" />
     <Content Include="Scripts\knockout-bindings-toggle.js" />
     <Content Include="Scripts\knockout-withComponent.js" />
@@ -207,6 +211,8 @@
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\legacy.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\picker.date.js" />
     <Content Include="Scripts\picker.js" />
     <Content Include="Scripts\picker.time.js" />

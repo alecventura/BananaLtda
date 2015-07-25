@@ -17,24 +17,16 @@ namespace BananaLtda.Controllers
 
         // Web Services para retornar a lista de matriz + filiais
         // GET: Branches
-        public JsonResult GetBranches()
+        public JsonResult GetList()
         {
             List<branch> branchesFromModel = db.branches.ToList();
             List<Branch> branchesJSON = new List<Branch>();
 
             foreach (var item in branchesFromModel)
             {
-                branchesJSON.Add(mapToJSON(item));
+                branchesJSON.Add(Branch.mapToJSON(item));
             }
             return Json(branchesJSON, JsonRequestBehavior.AllowGet);
-        }
-
-        private Branch mapToJSON(branch item)
-        {
-            Branch json = new Branch();
-            json.id = item.id;
-            json.name = item.name;
-            return json;
         }
 
         // Abaixo tem os outros Web Services criados pelo framework MVC, que foram comentados pois não nos interessa neste momento criar ou editar novas branches pela App,

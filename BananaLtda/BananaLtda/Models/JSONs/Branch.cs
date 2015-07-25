@@ -9,5 +9,13 @@ namespace BananaLtda.Models.JSONs
     {
         public int id { get; set; }
         public string name { get; set; }
+
+        public static Branch mapToJSON(branch item)
+        {
+            Branch json = new Branch();
+            json.id = item.id;
+            json.name = item.name;
+            return json;
+        }
     }
 }

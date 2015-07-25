@@ -34,9 +34,11 @@ namespace BananaLtda
                       "~/Scripts/knockout-3.3.0.debug.js", "~/Scripts/knockout.mapping-latest.debug.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockoutCustomBindings").Include(
+                      "~/Scripts/knockout-withComponent.js",
                       "~/Scripts/knockout-bindings-allowBindings.js",
                       "~/Scripts/knockout-bindings-modal.js",
                       "~/Scripts/knockout-bindings-pickadate.js",
+                      "~/Scripts/knockout-bindings-pickatime.js",
                       "~/Scripts/knockout-bindings-stopBinding.js",
                       "~/Scripts/knockout-bindings-toggle.js"));
 
@@ -51,6 +53,12 @@ namespace BananaLtda
 
             bundles.Add(new ScriptBundle("~/bundles/toastr").Include(
                       "~/Scripts/toastr.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/moment").Include(
+                      "~/Scripts/moment.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/utils").Include(
+                      "~/Scripts/utils.js"));
 
             // Scripts especificos de cada pagina:
 
