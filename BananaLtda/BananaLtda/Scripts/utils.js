@@ -4,12 +4,21 @@
 function utils() { }
 
 utils.handleValidationError = function (item) {
-    var element = $("." + item.path);
+    var element = $("#" + item.path);
     var parent = element.parent();
-    element.addClass(".alert");
-    parent.addClass(".alert");
-    parent.add("<p>" + item.error + "</p>");
+    element.addClass("has-error-input");
+    parent.addClass("has-error");
+
+    var errorHtml = '<div class="validation-error-message col-lg-12"><p>' + item.error + '</p></div>';
+
+    parent.append(errorHtml);
 };
+
+utils.clearErrors = function () {
+    $('.validation-error-message').remove();
+    $('.has-error-input').removeClass("has-error-input");
+    $('.has-error').removeClass("has-error");
+}
 
 utils.postJSON = function (path, data, callback) {
     return $.ajax({

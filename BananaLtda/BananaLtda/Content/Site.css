@@ -43,6 +43,25 @@ textarea {
     margin-bottom: 20px;
 }
 
+.margin-bottom0 {
+    margin-bottom: 0px;
+}
+
+.has-error-input {
+    border: 1px solid #BA4A48 !important;
+}
+
+.validation-error-message {
+    color: #BA4A48 !important;
+    text-align: center;
+    position: static;
+    display: inline-block;
+}
+
+.form-group.has-error {
+    margin-bottom: 0;
+}
+
 .input-nice {
     display: block;
     height: 34px;

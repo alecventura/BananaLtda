@@ -22,6 +22,8 @@ namespace BananaLtda.Models.JSONs
         public int endtime { get; set; }
         [Required]
         public string responsible { get; set; }
+        [Required]
+        public string description { get; set; }
         public int coffee { get; set; }
 
 
@@ -36,6 +38,7 @@ namespace BananaLtda.Models.JSONs
             json.starttime = (item.startDate.Hour * 60) + item.startDate.Minute; // Conversao necessaria já que as horas sao usadas em minutos no client-side.
             json.endtime = (item.endDate.Hour * 60) + item.endDate.Minute;
             json.enddate = item.endDate;
+            json.description = item.description;
             if (item.coffee != null)
                 json.coffee = (int)item.coffee;
 
@@ -61,6 +64,7 @@ namespace BananaLtda.Models.JSONs
 
             b.startDate = sd;
             b.endDate = ed;
+            b.description = json.description;
             if (json.coffee != null && json.coffee > 0)
                 b.coffee = json.coffee;
 

@@ -64,7 +64,7 @@ namespace BananaLtda.Controllers
                 // Verifica se a sala já está reservada naquele período
                 if (!IsRoomFree(reservation))
                 {
-                    return Json(new Answer(200, "Esta sala já está reservada!"), JsonRequestBehavior.AllowGet);
+                    return Json(new Answer(200, "Esta sala já está reservada neste horário!"), JsonRequestBehavior.AllowGet);
                 }
 
                 // Efetua a reserva da sala no banco de dados:
@@ -99,11 +99,15 @@ namespace BananaLtda.Controllers
         private bool IsRoomFree(booking reservation)
         {
             // Logica de validação para ver se a sala ja esta reservada:
-            // TODO: falta checar no intervalo de tempo
+            // TODO: revisar a logica para checar o choque de horarios
 
             var query = from b in db.bookings
                         where b.branch_fk == reservation.branch_fk
                         && b.room_fk == reservation.room_fk
+                        && ((reservation.startDate >= b.startDate && reservation.startDate <= b.endDate)
+                        || (reservation.endDate >= b.startDate && reservation.endDate <= b.endDate)
+                        || (reservation.endDate >= b.endDate && reservation.startDate <= b.startDate)
+                        || (reservation.endDate <= b.endDate && reservation.startDate >= b.startDate))
                         select b;
             bool valid = query.Count() == 0 ? true : false;
             return valid;

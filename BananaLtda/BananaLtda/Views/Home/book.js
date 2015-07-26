@@ -1,11 +1,13 @@
 ﻿var newReservation = {
-    'branch_fk': -1,
-    'room_fk': -1,
+    'branch_fk': null,
+    'room_fk': null,
     'startdate': "2015-04-27T03:00:00.000Z",
     'enddate': "2015-04-27T03:00:00.000Z",
-    'starttime': 0,  //Armazena a hora em minutos a partir da meia noite (Ex: meia noite é 0 minutos, meia noite e meia é 30min e por ai vai).
-    'endtime': 0,
+    'starttime': 460,  //Armazena a hora em minutos a partir da meia noite (Ex: meia noite é 0 minutos, meia noite e meia é 30min e por ai vai).
+    'endtime': 460,
     'responsible': "",
+    'description': "",
+    'coffee': 0,
     'id': -1
 }
 var request = { 'limit': 10, 'offset': 0 }
@@ -70,6 +72,7 @@ function BookViewModel() {
     }
 
     self.onSaveClicked = function () {
+        utils.clearErrors();
         $.ajax({
             type: "POST",
             url: "/Book/Create",
@@ -82,14 +85,14 @@ function BookViewModel() {
                         _.each(response.validationErrors, function (item) {
                             utils.handleValidationError(item);
                         })
+                    } else if (response.status == 200) {
+                        self.searchReservations(0, false);
+                        self.isVisible(false);
+                        $('.modal-backdrop').remove();
+                        toastr.success("Reserva efetuada!");
                     } else {
                         toastr.warning(response.message)
                     }
-                } else {
-                    self.search(0, false);
-                    self.isVisible(false);
-                    $('.modal-backdrop').remove();
-                    toastr.success("Reservation successfully created!");
                 }
             },
             failure: function (response) {
@@ -101,27 +104,25 @@ function BookViewModel() {
         });
     }
 
-    self.findBookings = (function () {
-        return function (offset, showmessage) {
-            self.request().offset(offset);
-            return utils.postJSON("/Book/GetList", self.mountRequest(), function (data) {
-                data = data.d;
-                self.request().offset(data.offset);
-                if (data.total === 0) {
-                    if (showmessage) {
-                        toastr.success("No reservation found!");
-                    }
-                    self.machines([]);
-                } else {
-                    if (showmessage) {
-                        toastr.success("Successfully found" + data.total + " machines!");
-                    }
-                    self.machines(data.list);
-                    self.generatePager(data, self);
+    self.searchReservations = function (offset, showmessage) {
+        self.request().offset(offset);
+        return utils.postJSON("/Book/GetList", self.mountRequest(), function (data) {
+            data = data.d;
+            self.request().offset(data.offset);
+            if (data.total === 0) {
+                if (showmessage) {
+                    toastr.success("No reservation found!");
                 }
-            });
-        };
-    })();
+                self.machines([]);
+            } else {
+                if (showmessage) {
+                    toastr.success("Successfully found" + data.total + " machines!");
+                }
+                self.machines(data.list);
+                self.generatePager(data, self);
+            }
+        });
+    };
 
     self.generatePager = (function (self) {
         return function (data, self) {
@@ -134,7 +135,7 @@ function BookViewModel() {
                 onClick: function (e, page) {
                     e.preventDefault();
                     if (page.enabled) {
-                        return self.findBookings(page.offset, false);
+                        return self.searchReservations(page.offset, false);
                     }
                 }
             };
