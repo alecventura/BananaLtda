@@ -149,6 +149,8 @@
       <DependentUpon>BananaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\JSONs\Branch.cs" />
+    <Compile Include="Models\JSONs\GenericItemJSON.cs" />
+    <Compile Include="Models\JSONs\Pagination.cs" />
     <Compile Include="Models\JSONs\Reservation.cs" />
     <Compile Include="Models\JSONs\Room.cs" />
     <Compile Include="Models\room.cs">
@@ -168,6 +170,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bootbox.js" />
+    <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\BananaModel.edmx">
@@ -213,6 +217,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\paginator.js" />
     <Content Include="Scripts\picker.date.js" />
     <Content Include="Scripts\picker.js" />
     <Content Include="Scripts\picker.time.js" />

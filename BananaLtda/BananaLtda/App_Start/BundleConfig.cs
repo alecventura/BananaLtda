@@ -57,8 +57,12 @@ namespace BananaLtda
             bundles.Add(new ScriptBundle("~/bundles/moment").Include(
                       "~/Scripts/moment.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/bootbox").Include(
+                      "~/Scripts/bootbox.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/utils").Include(
-                      "~/Scripts/utils.js"));
+                      "~/Scripts/utils.js",
+                      "~/Scripts/paginator.js"));
 
             // Scripts especificos de cada pagina:
 

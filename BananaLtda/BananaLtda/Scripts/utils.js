@@ -14,6 +14,16 @@ utils.handleValidationError = function (item) {
     parent.append(errorHtml);
 };
 
+utils.handleValidationErrors = function (response) {
+    if (response.validationErrors != null && response.validationErrors.length > 0) {
+        _.each(response.validationErrors, function (item) {
+            utils.handleValidationError(item);
+        })
+    } else {
+        toastr.warning(response.message)
+    }
+}
+
 utils.clearErrors = function () {
     $('.validation-error-message').remove();
     $('.has-error-input').removeClass("has-error-input");

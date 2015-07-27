@@ -1,15 +1,29 @@
 ﻿var newReservation = {
     'branch_fk': null,
     'room_fk': null,
-    'startdate': "2015-04-27T03:00:00.000Z",
-    'enddate': "2015-04-27T03:00:00.000Z",
-    'starttime': 460,  //Armazena a hora em minutos a partir da meia noite (Ex: meia noite é 0 minutos, meia noite e meia é 30min e por ai vai).
-    'endtime': 460,
+    'startdate': moment().startOf('day').toDate(), // Inicia com a data atual
+    'enddate': moment().startOf('day').toDate(),
+    'starttime': 480,  //Armazena a hora em minutos a partir da meia noite (Ex: meia noite é 0 minutos, meia noite e meia é 30min e por ai vai).
+    'endtime': 480, // 480  representa 8h da manha
     'responsible': "",
     'description': "",
     'coffee': 0,
     'id': -1
 }
+
+// Se starttime ou endtime vier com valor nulo, coloca zero. 
+var mapping = {
+    'endtime': {
+        update: function (options) {
+            return options.data || 0;
+        }
+    }, 'starttime': {
+        update: function (options) {
+            return options.data || 0;
+        }
+    }
+}
+
 var request = { 'limit': 10, 'offset': 0 }
 
 function BookViewModel() {
@@ -36,24 +50,23 @@ function BookViewModel() {
     });
 
     self.onEditClicked = function (item) {
-        self.objModal(ko.mapping.fromJS(item));
+        mapedObj = ko.mapping.fromJS(item, mapping);
+        self.objModal(mapedObj);
+        self.objModal().room_fk(item.room_fk);
         self.isVisible(true);
     }
 
-    self.onCancelClicked = function (item) {
-        bootbox.confirm("Are you sure you want to cancel the reservertion of the room=" + item.name + "?", function (result) {
+    self.onRemoveClicked = function (item) {
+        bootbox.confirm("Tem certeza que deseja cancelar a reserva da sala=" + item.roomName + "?", function (result) {
             if (result) {
-                var deep = _.cloneDeep(newReservation);
-                deep.id = item.id
                 $.ajax({
                     type: "POST",
-                    url: "Machines.aspx/removeMachine",
+                    url: "/Book/Delete/" + item.id,
                     contentType: "application/json; charset=utf-8",
-                    data: '{book: ' + JSON.stringify(deep) + '}',
                     dataType: 'json',
                     success: function (response) {
-                        self.findBookings(0, false);
-                        toastr.success("Reservertion successfully canceled!");
+                        self.searchReservations(0, false);
+                        toastr.success("Reserva removida com sucesso!");
                     },
                     failure: function (response) {
                         alert(response);
@@ -67,24 +80,23 @@ function BookViewModel() {
 
     }
 
-    self.mountRequest = function () {
-        return JSON.stringify({ 'request': ko.mapping.toJS(self.request) });
-    }
-
     self.onSaveClicked = function () {
         utils.clearErrors();
+        data = ko.mapping.toJS(self.objModal);
+        if (data.starttime == null || data.starttime == 'undefined')
+            data.starttime = 0
+        if (data.endtime == null || data.endtime == 'undefined')
+            data.endtime = 0
         $.ajax({
             type: "POST",
-            url: "/Book/Create",
+            url: "/Book/Save",
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(ko.mapping.toJS(self.objModal)),
+            data: JSON.stringify(data),
             dataType: 'json',
             success: function (response) {
                 if (response.status != null) {
                     if (response.status == 400) {
-                        _.each(response.validationErrors, function (item) {
-                            utils.handleValidationError(item);
-                        })
+                        utils.handleValidationErrors(response);
                     } else if (response.status == 200) {
                         self.searchReservations(0, false);
                         self.isVisible(false);
@@ -104,31 +116,61 @@ function BookViewModel() {
         });
     }
 
+    self.mountRequest = function () {
+        return JSON.stringify({ 'request': ko.mapping.toJS(self.request) });
+    }
+
     self.searchReservations = function (offset, showmessage) {
         self.request().offset(offset);
-        return utils.postJSON("/Book/GetList", self.mountRequest(), function (data) {
-            data = data.d;
-            self.request().offset(data.offset);
-            if (data.total === 0) {
-                if (showmessage) {
-                    toastr.success("No reservation found!");
+        $.ajax({
+            type: "GET",
+            url: "/Book/GetList?limit=" + self.request().limit() + "&offset=" + self.request().offset(),
+            dataType: 'json',
+            success: function (data) {
+                self.request().offset(data.offset);
+                if (data.total === 0) {
+                    if (showmessage) {
+                        toastr.success("Nenhuma reserva encontrada!");
+                    }
+                    self.reservations([]);
+                } else {
+                    if (showmessage) {
+                        toastr.success("Foram encontradas " + data.total + " reservas!");
+                    }
+                    parsedList = self.parseReservations(data.list);
+                    self.reservations(parsedList);
+                    self.generatePager(data, self);
                 }
-                self.machines([]);
-            } else {
-                if (showmessage) {
-                    toastr.success("Successfully found" + data.total + " machines!");
-                }
-                self.machines(data.list);
-                self.generatePager(data, self);
+            },
+            failure: function (response) {
+                alert(response);
+            },
+            error: function (response) {
+                alert(response);
             }
         });
     };
+
+    // Metodo para transformar os dados que vieram do web-services mais user-friendly
+    self.parseReservations = function (list) {
+        _.each(list, function (item) {
+            branch = _.find(self.branches(), function (i) { return i.id == item.branch_fk });
+            item.branchName = branch.name;
+            room = _.find(self.rooms(), function (i) { return i.id == item.room_fk });
+            item.roomName = room.name;
+
+            item.startdateFormated = moment(item.startdate).format('DD/MM/YYYY HH:mm');
+            item.enddateFormated = moment(item.enddate).format('DD/MM/YYYY HH:mm');
+        })
+
+        return list;
+    }
 
     self.generatePager = (function (self) {
         return function (data, self) {
             var pagerOpts;
             pagerOpts = {
-                div: $('#pager'),
+                div: $('#pager-reservations'),
                 offset: data.offset,
                 limit: self.request().limit(),
                 total: data.total,
@@ -179,7 +221,13 @@ function BookViewModel() {
 
     self.loadBranches();
     self.loadRooms();
-    //self.findBookings(0, false);
+
+    // Só carrega as reservas depois de carregar o array de filiais e o array de salas
+    loadReservations = ko.computed(function () {
+        if (self.branches().length > 0 && self.rooms().length > 0)
+            self.searchReservations(0, true);
+    });
+
 }
 
 $(document).ready(function () {

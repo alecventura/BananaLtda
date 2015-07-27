@@ -15,14 +15,14 @@
 <body>
     <div class="row" id="books-content">
         <div class="col-xs-10 col-xs-offset-1" style="margin-top: 10px;">
-            <button type="button" class="btn btn-primary" data-bind="toggle: isVisible">Reserve a room</button>
+            <button type="button" class="btn btn-primary" data-bind="toggle: isVisible">Fazer uma reserva</button>
         </div>
 
         <div class="col-xs-10 col-xs-offset-1">
-            <h2 style="text-align: center;">Reservations</h2>
+            <h2 style="text-align: center;">Reservas</h2>
 
             <div data-bind="visible:$root.reservations() == null || $root.reservations().length == 0 ">
-                <p>There is no reservation registered</p>
+                <p>Ainda não há reserva</p>
             </div>
 
             <div data-bind="visible: $root.reservations() != null && $root.reservations().length > 0">
@@ -30,25 +30,28 @@
                     <thead>
                         <tr>
                             <th>
-                                Branch
+                                Filial
                             </th>
                             <th>
-                                Room
+                                Sala
                             </th>
                             <th>
-                                Start Time
+                                Início
                             </th>
                             <th>
-                                End Time
+                                Até
                             </th>
                             <th>
-                                Responsable
+                                Responsável
                             </th>
                             <th>
-                                Number of coffees asked
+                                Cafés
                             </th>
                             <th style="text-align: center;">
-                                Cancel
+                                Editar
+                            </th>
+                            <th style="text-align: center;">
+                                Remover
                             </th>
 
                         </tr>
@@ -57,12 +60,15 @@
                         <tr>
                             <td data-bind="text: $data.branchName"></td>
                             <td data-bind="text: $data.roomName"></td>
-                            <td data-bind="text: $data.startDate"></td>
-                            <td data-bind="text: $data.endDate"></td>
-                            <td data-bind="text: $data.responsable"></td>
+                            <td data-bind="text: $data.startdateFormated"></td>
+                            <td data-bind="text: $data.enddateFormated"></td>
+                            <td data-bind="text: $data.responsible"></td>
                             <td data-bind="text: $data.coffee"></td>
                             <td style="text-align: center;">
-                                <a href="#" data-bind="click: $root.onCancelClicked"><i class="glyphicon glyphicon-download-alt"></i></a>
+                                <a href="#" data-bind="click: $root.onEditClicked"><i class="glyphicon glyphicon-edit"></i></a>
+                            </td>
+                            <td style="text-align: center;">
+                                <a href="#" data-bind="click: $root.onRemoveClicked"><i class="glyphicon glyphicon-remove"></i></a>
                             </td>
                         </tr>
                     </tbody>
@@ -77,52 +83,52 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-bind="toggle: isVisible" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">Create Reservation</h4>
+                        <h4 class="modal-title">Reserve uma sala</h4>
                     </div>
                     <div class="modal-body" data-bind="with: objModal">
                         <div class="form-group margin-bottom20">
-                            <label class="control-label label-centralized col-lg-4">Branch:</label>
+                            <label class="control-label label-centralized col-lg-4">Filial:</label>
                             <select id="branch_fk" class="select-nice col-lg-8" data-bind="options: $root.branches, optionsValue:'id', optionsText: 'name',value: branch_fk, optionsCaption: 'Choose a Branch'"></select>
                         </div>
                         <br />
                         <div class="form-group margin-bottom20">
-                            <label class="control-label label-centralized col-lg-4">Room:</label>
+                            <label class="control-label label-centralized col-lg-4">Sala:</label>
                             <select id="room_fk" class="select-nice col-lg-8" data-bind="disable: !$root.hasSelectedBranch(), options: $root.linkedRooms, optionsValue:'id', optionsText: 'name',value: room_fk, optionsCaption: 'Choose a Room'"></select>
                         </div>
 
                         <br />
                         <div class="form-group margin-bottom20">
-                            <label class="control-label label-centralized col-lg-4">Start date and time:</label>
+                            <label class="control-label label-centralized col-lg-4">Início:</label>
                             <input id="startdate" class="input-nice col-lg-4" type="text" data-bind="pickadate: startdate, pickadateOptions:{container: 'body'}" />
-                            <input id="starttime" class="input-nice col-lg-4" type="text" data-bind="pickatime: starttime, pickatimeOptions:{container: 'body'}" />
+                            <input id="starttime" class="input-nice col-lg-4" type="text" data-bind="pickatime: starttime, pickatimeOptions:{container: 'body', clear: ''}" />
                         </div>
                         <br />
                         <div class="form-group margin-bottom20">
-                            <label class="control-label label-centralized col-lg-4">End date and time:</label>
+                            <label class="control-label label-centralized col-lg-4">Término:</label>
                             <input id="enddate" class="input-nice col-lg-4" type="text" data-bind="pickadate: enddate, pickadateOptions:{container: 'body'}" />
-                            <input id="endtime" class="input-nice col-lg-4" type="text" data-bind="pickatime: endtime, pickatimeOptions:{container: 'body'}" />
+                            <input id="endtime" class="input-nice col-lg-4" type="text" data-bind="pickatime: endtime, pickatimeOptions:{container: 'body', clear: ''}" />
                         </div>
 
                         <br />
                         <div class="form-group margin-bottom20">
-                            <label class="control-label label-centralized col-lg-4">Responsible:</label>
+                            <label class="control-label label-centralized col-lg-4">Responsável:</label>
                             <input id="responsible" class="input-nice col-lg-8" type="text" data-bind="value: responsible" />
                         </div>
                         <br />
                         <div class="form-group margin-bottom20">
-                            <label class="control-label label-centralized col-lg-4">Description:</label>
+                            <label class="control-label label-centralized col-lg-4">Descrição:</label>
                             <input id="description" class="input-nice col-lg-8" type="text" data-bind="value: description" />
                         </div>
                         <br />
                         <div class="form-group margin-bottom20">
-                            <label class="control-label label-centralized col-lg-4">Coffee for:</label>
+                            <label class="control-label label-centralized col-lg-4">Nº de cafés:</label>
                             <input id="coffee" class="input-nice col-lg-8" type="number" data-bind="value: coffee" />
                         </div>
                         <br />
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-bind="toggle: $root.isVisible">Close</button>
-                        <button type="button" class="btn btn-primary" data-bind="click: $root.onSaveClicked">Save</button>
+                        <button type="button" class="btn btn-default" data-bind="toggle: $root.isVisible">Fechar</button>
+                        <button type="button" class="btn btn-primary" data-bind="click: $root.onSaveClicked">Salvar</button>
                     </div>
                 </div>
             </div>

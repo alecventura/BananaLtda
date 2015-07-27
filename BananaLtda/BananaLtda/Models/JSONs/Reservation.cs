@@ -6,13 +6,15 @@ using System.Web;
 
 namespace BananaLtda.Models.JSONs
 {
-    public class Reservation
+    public class Reservation : GenericItemJSON
     {
         public int id { get; set; }
         [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Selecione uma filial")]
         //[StringLength(30, MinimumLength = 3, ErrorMessage = "Invalid")]
         public int branch_fk { get; set; }
         [Required]
+        [Range(1, int.MaxValue, ErrorMessage = "Selecione uma sala")]
         public int room_fk { get; set; }
         [Required]
         public DateTime startdate { get; set; }
@@ -48,6 +50,10 @@ namespace BananaLtda.Models.JSONs
         internal static booking map(Reservation json)
         {
             booking b = new booking();
+            if (json.id != null && json.id > 0)
+            {
+                b.id = json.id;
+            }
             b.branch_fk = json.branch_fk;
             b.room_fk = json.room_fk;
             b.responsable = json.responsible;

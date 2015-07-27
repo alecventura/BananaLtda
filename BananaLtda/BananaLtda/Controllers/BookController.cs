@@ -15,7 +15,7 @@ namespace BananaLtda.Controllers
         private bananaltdaEntities db = new bananaltdaEntities();
 
         // GET: Retorna a lista com todas as reservas.
-        public JsonResult GetList()
+        public JsonResult GetList(int limit, int offset)
         {
             List<booking> bookingsFromModel = db.bookings.ToList();
             List<Reservation> reservationsJSON = new List<Reservation>();
@@ -24,38 +24,20 @@ namespace BananaLtda.Controllers
             {
                 reservationsJSON.Add(Reservation.mapToJSON(item));
             }
-            return Json(reservationsJSON, JsonRequestBehavior.AllowGet);
-        }
-
-        // GET: Book/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
+            return Json(new Pagination(reservationsJSON.Cast<GenericItemJSON>().ToList(), bookingsFromModel.Count, offset), JsonRequestBehavior.AllowGet);
         }
 
         // POST: Web-services para criar uma reserva.
         [HttpPost]
-        public JsonResult Create(Reservation json)
+        public JsonResult Save(Reservation json)
         {
             try
             {
-                // Valida as anotations dos attributos do objeto de entrada (se é required, maxlenght e etc)
+                // Valida as anotations dos attributos do json de entrada (se é required, maxlenght e etc)
                 if (!ModelState.IsValid)
                 {
-                    List<ValidationError> answerValidationErrors = new List<ValidationError>();
-                    var modelStateErrors = this.ModelState.Keys.SelectMany(key => this.ModelState[key].Errors);
-                    foreach (var key in this.ModelState.Keys)
-                    {
-                        if (this.ModelState[key].Errors != null && this.ModelState[key].Errors.Count > 0)
-                        {
-                            foreach (var error in this.ModelState[key].Errors)
-                            {
-                                answerValidationErrors.Add(new ValidationError(key, error.ErrorMessage));
-                            }
-                        }
-                    }
+                    List<ValidationError> answerValidationErrors = GetJSONValidationErrorsList();
                     return Json(new Answer(400, "Validation Error!", answerValidationErrors), JsonRequestBehavior.AllowGet);
-
                 }
 
                 // Transforma o objeto json em um objeto do modelo:
@@ -64,24 +46,19 @@ namespace BananaLtda.Controllers
                 // Verifica se a sala já está reservada naquele período
                 if (!IsRoomFree(reservation))
                 {
-                    return Json(new Answer(200, "Esta sala já está reservada neste horário!"), JsonRequestBehavior.AllowGet);
+                    return Json(new Answer(400, "Esta sala já está reservada neste horário!"), JsonRequestBehavior.AllowGet);
                 }
 
-                // Efetua a reserva da sala no banco de dados:
-                SaveReservation(reservation);
+                if (reservation.id > 0)
+                    // Efetua a reserva da sala no banco de dados:
+                    UpdateReservation(reservation);
+                else
+                    SaveReservation(reservation);
                 return Json(new Answer(200, "OK"));
             }
             catch (DbEntityValidationException dbEx)
             {
-                // Se acaso ocorrer algum erro que foi detectado pelo EF e não pelo objeto JSON de entrada:
-                List<ValidationError> answerValidationErrors = new List<ValidationError>();
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        answerValidationErrors.Add(new ValidationError(validationError.PropertyName, validationError.ErrorMessage));
-                    }
-                }
+                List<ValidationError> answerValidationErrors = GetModelValidationErrorsList(dbEx);
                 return Json(new Answer(400, "Validation Error!", answerValidationErrors), JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -90,10 +67,82 @@ namespace BananaLtda.Controllers
             }
         }
 
+        // POST: Book/Delete/5
+        [HttpPost]
+        public JsonResult Delete(int id)
+        {
+            try
+            {
+                DeleteReservation(id);
+                return Json(new Answer(200, "OK"));
+            }
+            catch (Exception ex)
+            {
+                return Json(new Answer(500, "Something went wrong: " + ex.Message), JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+        #region Private Methods
+
+        private void DeleteReservation(int id)
+        {
+            var query = from it in db.bookings
+                        where it.id == id
+                        select it;
+            booking b = query.FirstOrDefault();
+            db.bookings.Remove(b);
+            db.SaveChanges();
+        }
         private void SaveReservation(booking reservation)
         {
             db.bookings.Add(reservation);
             db.SaveChanges();
+        }
+        private void UpdateReservation(booking reservation)
+        {
+            var query = from it in db.bookings
+                        where it.id == reservation.id
+                        select it;
+            booking b = query.FirstOrDefault();
+            b.branch_fk = reservation.branch_fk;
+            b.room_fk = reservation.room_fk;
+            b.startDate = reservation.startDate;
+            b.endDate = reservation.endDate;
+            b.responsable = reservation.responsable;
+            b.description = reservation.description;
+            b.coffee = reservation.coffee;
+            db.SaveChanges();
+        }
+        private List<ValidationError> GetJSONValidationErrorsList()
+        {
+            List<ValidationError> answerValidationErrors = new List<ValidationError>();
+            var modelStateErrors = this.ModelState.Keys.SelectMany(key => this.ModelState[key].Errors);
+            foreach (var key in this.ModelState.Keys)
+            {
+                if (this.ModelState[key].Errors != null && this.ModelState[key].Errors.Count > 0)
+                {
+                    foreach (var error in this.ModelState[key].Errors)
+                    {
+                        answerValidationErrors.Add(new ValidationError(key, error.ErrorMessage));
+                    }
+                }
+            }
+            return answerValidationErrors;
+        }
+
+        private List<ValidationError> GetModelValidationErrorsList(DbEntityValidationException dbEx)
+        {
+            // Se acaso ocorrer algum erro que foi detectado pelo EF e não pelo objeto JSON de entrada:
+            List<ValidationError> answerValidationErrors = new List<ValidationError>();
+            foreach (var validationErrors in dbEx.EntityValidationErrors)
+            {
+                foreach (var validationError in validationErrors.ValidationErrors)
+                {
+                    answerValidationErrors.Add(new ValidationError(validationError.PropertyName, validationError.ErrorMessage));
+                }
+            }
+            return answerValidationErrors;
         }
 
         private bool IsRoomFree(booking reservation)
@@ -109,40 +158,15 @@ namespace BananaLtda.Controllers
                         || (reservation.endDate >= b.endDate && reservation.startDate <= b.startDate)
                         || (reservation.endDate <= b.endDate && reservation.startDate >= b.startDate))
                         select b;
+
+            // Se só tiver o próprio id naquele horario então deixa atualizar
+            if (reservation.id != null && reservation.id > 0)
+            {
+                query = query.Where(x => x.id != reservation.id);
+            }
             bool valid = query.Count() == 0 ? true : false;
             return valid;
         }
-
-        // POST: Book/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // POST: Book/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        #endregion
     }
 }
