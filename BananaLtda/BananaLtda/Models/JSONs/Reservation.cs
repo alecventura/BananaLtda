@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
@@ -11,21 +12,28 @@ namespace BananaLtda.Models.JSONs
         public int id { get; set; }
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Selecione uma filial")]
+        [DisplayName("Filial")]
         //[StringLength(30, MinimumLength = 3, ErrorMessage = "Invalid")]
         public int branch_fk { get; set; }
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Selecione uma sala")]
+        [DisplayName("Sala")]
         public int room_fk { get; set; }
         [Required]
+        [DisplayName("Início")]
         public DateTime startdate { get; set; }
         [Required]
+        [DisplayName("Fim")]
         public DateTime enddate { get; set; }
         public int starttime { get; set; }
         public int endtime { get; set; }
         [Required]
+        [DisplayName("Responsável")]
         public string responsible { get; set; }
         [Required]
+        [DisplayName("Descrição")]
         public string description { get; set; }
+        [DisplayName("Nº de cafés")]
         public int coffee { get; set; }
 
 

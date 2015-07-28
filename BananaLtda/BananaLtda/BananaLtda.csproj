@@ -122,8 +122,10 @@
     <Compile Include="Controllers\BookController.cs" />
     <Compile Include="Controllers\BranchesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ReservationController.cs" />
     <Compile Include="Controllers\RoomsController.cs" />
     <Compile Include="Controllers\ValidationError.cs" />
+    <Compile Include="Controllers\ViewModels\ReservationsViewModel.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -159,11 +161,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-datetimepicker.css" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\default.css" />
     <Content Include="Content\default.date.css" />
     <Content Include="Content\default.time.css" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
@@ -172,6 +179,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\BananaModel.edmx">
@@ -193,6 +202,15 @@
     </Content>
     <Content Include="Content\toastr.scss" />
     <Content Include="Content\toastr.less" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -215,8 +233,11 @@
     <Content Include="Scripts\knockout.mapping-latest.js" />
     <Content Include="Scripts\legacy.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\npm.js" />
     <Content Include="Scripts\paginator.js" />
     <Content Include="Scripts\picker.date.js" />
     <Content Include="Scripts\picker.js" />
@@ -230,6 +251,7 @@
     <Content Include="Scripts\utils.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Home\book.js" />
+    <Content Include="Views\Reservation\Create.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -248,17 +270,13 @@
     <Content Include="Views\Home\Book.cshtml" />
     <Content Include="Views\Home\Calendar.cshtml" />
     <Content Include="Scripts\underscore.min.map" />
+    <Content Include="Views\Reservation\Index.cshtml" />
+    <Content Include="Views\Reservation\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Branches\" />
-    <Folder Include="Views\List\" />
-    <Folder Include="Views\Rooms\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>

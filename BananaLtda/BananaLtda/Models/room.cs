@@ -11,18 +11,20 @@ namespace BananaLtda.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel;
+
     public partial class room
     {
         public room()
         {
             this.bookings = new HashSet<booking>();
         }
-    
+
         public int id { get; set; }
         public Nullable<int> branch_fk { get; set; }
+        [DisplayName("Sala")]
         public string name { get; set; }
-    
+
         public virtual ICollection<booking> bookings { get; set; }
         public virtual branch branch { get; set; }
     }

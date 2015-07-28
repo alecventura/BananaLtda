@@ -25,9 +25,10 @@ namespace BananaLtda
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
-                      "~/Content/default.css",
-                      "~/Content/default.date.css",
-                      "~/Content/default.time.css",
+                //"~/Content/default.css",
+                //"~/Content/default.date.css",
+                //"~/Content/default.time.css",
+                      "~/Content/bootstrap-datetimepicker.css",
                       "~/Content/toastr.min.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
@@ -59,6 +60,9 @@ namespace BananaLtda
 
             bundles.Add(new ScriptBundle("~/bundles/bootbox").Include(
                       "~/Scripts/bootbox.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/datetimepicker").Include(
+                      "~/Scripts/bootstrap-datetimepicker.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/utils").Include(
                       "~/Scripts/utils.js",

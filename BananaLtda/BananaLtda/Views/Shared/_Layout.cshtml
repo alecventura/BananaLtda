@@ -7,6 +7,7 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("myScripts", false);
+    @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -16,6 +17,7 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Booking", "Index", "Book")</li>
                     <li>@Html.ActionLink("Calendar", "Index", "Calendar")</li>
+                    <li>@Html.ActionLink("Reservation", "Index", "Reservation")</li>
                 </ul>
             </div>
         </div>
@@ -28,7 +30,6 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/knockout")
     @Scripts.Render("~/bundles/knockoutCustomBindings")
@@ -37,6 +38,7 @@
     @Scripts.Render("~/bundles/pickadate")
     @Scripts.Render("~/bundles/toastr")
     @Scripts.Render("~/bundles/bootbox")
+    @Scripts.Render("~/bundles/datetimepicker")
     @Scripts.Render("~/bundles/utils")
     @RenderSection("scripts", required: false)
 </body>
