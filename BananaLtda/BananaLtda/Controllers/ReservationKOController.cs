@@ -10,9 +10,14 @@ using System.Web.Mvc;
 
 namespace BananaLtda.Controllers
 {
-    public class BookController : Controller
+    public class ReservationKOController : Controller
     {
         private bananaltdaEntities db = new bananaltdaEntities();
+
+        public ActionResult Index()
+        {
+            return View();
+        }
 
         // GET: Retorna a lista com todas as reservas.
         public JsonResult GetList(int limit, int offset)

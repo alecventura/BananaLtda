@@ -12,7 +12,7 @@ using BananaLtda.Models.JSONs;
 
 namespace BananaLtda.Controllers
 {
-    public class ReservationController : Controller
+    public class ReservationMVCController : Controller
     {
         private bananaltdaEntities db = new bananaltdaEntities();
 
@@ -43,6 +43,7 @@ namespace BananaLtda.Controllers
         {
             ViewBag.branches = LoadBranches();
             ViewBag.rooms = LoadRooms();
+            ViewBag.IsRoomFree = true;
 
             return View();
         }
@@ -54,9 +55,17 @@ namespace BananaLtda.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.bookings.Add(booking);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                ViewBag.IsRoomFree = true;
+                if (!IsRoomFree(booking))
+                {
+                    ViewBag.IsRoomFree = false;
+                }
+                else
+                {
+                    db.bookings.Add(booking);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
 
             ViewBag.branches = LoadBranches();
@@ -132,6 +141,7 @@ namespace BananaLtda.Controllers
             base.Dispose(disposing);
         }
 
+        #region Private Methods
         private List<Branch> LoadBranches()
         {
             List<branch> branchesFromModel = db.branches.ToList();
@@ -155,5 +165,29 @@ namespace BananaLtda.Controllers
             }
             return roomsJSON;
         }
+        private bool IsRoomFree(booking reservation)
+        {
+            // Logica de validação para ver se a sala ja esta reservada:
+            // TODO: revisar a logica para checar o choque de horarios
+
+            var query = from b in db.bookings
+                        where b.branch_fk == reservation.branch_fk
+                        && b.room_fk == reservation.room_fk
+                        && ((reservation.startDate >= b.startDate && reservation.startDate <= b.endDate)
+                        || (reservation.endDate >= b.startDate && reservation.endDate <= b.endDate)
+                        || (reservation.endDate >= b.endDate && reservation.startDate <= b.startDate)
+                        || (reservation.endDate <= b.endDate && reservation.startDate >= b.startDate))
+                        select b;
+
+            // Se só tiver o próprio id naquele horario então deixa atualizar
+            if (reservation.id != null && reservation.id > 0)
+            {
+                query = query.Where(x => x.id != reservation.id);
+            }
+            bool valid = query.Count() == 0 ? true : false;
+            return valid;
+        }
+        #endregion
+
     }
 }

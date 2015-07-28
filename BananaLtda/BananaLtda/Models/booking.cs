@@ -12,21 +12,28 @@ namespace BananaLtda.Models
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
 
     public partial class booking
     {
         public int id { get; set; }
+        [Required]
         [DisplayName("Filial")]
         public int branch_fk { get; set; }
+        [Required]
         [DisplayName("Sala")]
         public int room_fk { get; set; }
+        [Required]
         [DisplayName("Início")]
         public System.DateTime startDate { get; set; }
+        [Required]
         [DisplayName("Fim")]
         public System.DateTime endDate { get; set; }
+        [Required]
         [DisplayName("Responsável")]
         public string responsable { get; set; }
         [DisplayName("Descrição")]
+        [Required]
         public string description { get; set; }
         public Nullable<int> coffee { get; set; }
 

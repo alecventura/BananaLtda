@@ -101,4 +101,8 @@
     var ModelSelectedRoom = @(@Model == null ? 0 : @Model.room_fk);
     var ModelNeedCoffee = '@(@Model == null ? false : ((@Model.coffee == null || @Model.coffee == 0) ? false : true))';
     ModelNeedCoffee = ModelNeedCoffee === 'True';
+    var ModelIsRoomFree = '@ViewBag.IsRoomFree';
+
+    if (ModelIsRoomFree === 'False')
+        toastr.warning("Esta sala já está reservada neste horário!");
 </script>

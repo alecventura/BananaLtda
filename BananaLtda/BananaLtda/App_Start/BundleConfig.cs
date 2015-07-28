@@ -10,10 +10,10 @@ namespace BananaLtda
         {
             // Scripts que vão ser incluidos em todas as paginas (eles são incluidos no _Layout.cshtml)
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"));
+                        "~/Scripts/jquery.validate/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
@@ -25,9 +25,9 @@ namespace BananaLtda
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
-                //"~/Content/default.css",
-                //"~/Content/default.date.css",
-                //"~/Content/default.time.css",
+                    "~/Content/default.css",
+                    "~/Content/default.date.css",
+                    "~/Content/default.time.css",
                       "~/Content/bootstrap-datetimepicker.css",
                       "~/Content/toastr.min.css"));
 
@@ -35,38 +35,38 @@ namespace BananaLtda
                       "~/Scripts/knockout-3.3.0.debug.js", "~/Scripts/knockout.mapping-latest.debug.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockoutCustomBindings").Include(
-                      "~/Scripts/knockout-withComponent.js",
-                      "~/Scripts/knockout-bindings-allowBindings.js",
-                      "~/Scripts/knockout-bindings-modal.js",
-                      "~/Scripts/knockout-bindings-pickadate.js",
-                      "~/Scripts/knockout-bindings-pickatime.js",
-                      "~/Scripts/knockout-bindings-stopBinding.js",
-                      "~/Scripts/knockout-bindings-toggle.js"));
+                      "~/Scripts/knockoutCustomBindings/knockout-withComponent.js",
+                      "~/Scripts/knockoutCustomBindings/knockout-bindings-allowBindings.js",
+                      "~/Scripts/knockoutCustomBindings/knockout-bindings-modal.js",
+                      "~/Scripts/knockoutCustomBindings/knockout-bindings-pickadate.js",
+                      "~/Scripts/knockoutCustomBindings/knockout-bindings-pickatime.js",
+                      "~/Scripts/knockoutCustomBindings/knockout-bindings-stopBinding.js",
+                      "~/Scripts/knockoutCustomBindings/knockout-bindings-toggle.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/underscore").Include(
-                      "~/Scripts/underscore.min.js"));
+                      "~/Scripts/utils/underscore.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/pickadate").Include(
-                      "~/Scripts/legacy.js",
-                      "~/Scripts/picker.js",
-                      "~/Scripts/picker.date.js",
-                      "~/Scripts/picker.time.js"));
+                      "~/Scripts/utils/legacy.js",
+                      "~/Scripts/utils/picker.js",
+                      "~/Scripts/utils/picker.date.js",
+                      "~/Scripts/utils/picker.time.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/toastr").Include(
-                      "~/Scripts/toastr.min.js"));
+                      "~/Scripts/utils/toastr.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/moment").Include(
-                      "~/Scripts/moment.min.js"));
+                      "~/Scripts/utils/moment.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootbox").Include(
-                      "~/Scripts/bootbox.min.js"));
+                      "~/Scripts/utils/bootbox.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/datetimepicker").Include(
-                      "~/Scripts/bootstrap-datetimepicker.min.js"));
+                      "~/Scripts/utils/bootstrap-datetimepicker.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/utils").Include(
-                      "~/Scripts/utils.js",
-                      "~/Scripts/paginator.js"));
+                      "~/Scripts/utils/utils.js",
+                      "~/Scripts/utils/paginator.js"));
 
             // Scripts especificos de cada pagina:
 

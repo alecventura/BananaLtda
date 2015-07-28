@@ -16,15 +16,5 @@ namespace BananaLtda.Controllers
             return View();
         }
 
-        public ActionResult Book()
-        {
-            return View(db.bookings.ToList());
-        }
-
-        public ActionResult Calendar()
-        {
-            return View();
-        }
-
     }
 }

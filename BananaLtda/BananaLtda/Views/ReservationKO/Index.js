@@ -35,6 +35,8 @@ function BookViewModel() {
     self.isVisible = ko.observable(false);
     self.objModal = ko.observable(ko.mapping.fromJS(newReservation));
 
+    self.hasCoffee = ko.observable(false);
+
     self.linkedRooms = ko.computed(function () {
         var array = [];
         _.each(self.rooms(), function (item) {
@@ -53,6 +55,7 @@ function BookViewModel() {
         mapedObj = ko.mapping.fromJS(item, mapping);
         self.objModal(mapedObj);
         self.objModal().room_fk(item.room_fk);
+        self.hasCoffee(self.objModal().coffee() != null && self.objModal().coffee() > 0);
         self.isVisible(true);
     }
 
@@ -61,7 +64,7 @@ function BookViewModel() {
             if (result) {
                 $.ajax({
                     type: "POST",
-                    url: "/Book/Delete/" + item.id,
+                    url: "/ReservationKO/Delete/" + item.id,
                     contentType: "application/json; charset=utf-8",
                     dataType: 'json',
                     success: function (response) {
@@ -89,7 +92,7 @@ function BookViewModel() {
             data.endtime = 0
         $.ajax({
             type: "POST",
-            url: "/Book/Save",
+            url: "/ReservationKO/Save",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(data),
             dataType: 'json',
@@ -124,7 +127,7 @@ function BookViewModel() {
         self.request().offset(offset);
         $.ajax({
             type: "GET",
-            url: "/Book/GetList?limit=" + self.request().limit() + "&offset=" + self.request().offset(),
+            url: "/ReservationKO/GetList?limit=" + self.request().limit() + "&offset=" + self.request().offset(),
             dataType: 'json',
             success: function (data) {
                 self.request().offset(data.offset);
