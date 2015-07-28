@@ -1,79 +1,109 @@
 ﻿@model BananaLtda.Models.booking
 
+@section scripts{
+    <script src="~/Views/ReservationMVC/CreateEdit.js"></script>
+}
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>booking</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.id)
+    <div id="reservation-body">
+        <div class="form-horizontal">
+            <h4>Editar Reserva</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            @Html.HiddenFor(model => model.id)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.branch_fk, "branch_fk", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("branch_fk", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.branch_fk, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.branch_fk, "branch_fk", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <select id="branch_fk" class="form-control" data-bind="options: $root.branches, optionsValue:'id', optionsText: 'name', value: $root.selectedBranch, optionsCaption: 'Choose a Branch'"></select>
+                    @Html.ValidationMessageFor(model => model.branch_fk, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.room_fk, "room_fk", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("room_fk", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.room_fk, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.room_fk, "room_fk", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <select id="room_fk" class="form-control" data-bind="disable: !$root.hasSelectedBranch(), options: $root.availableRooms, optionsValue:'id', optionsText: 'name', value: $root.selectedRoom, optionsCaption: 'Choose a Room'"></select>
+                    @Html.ValidationMessageFor(model => model.room_fk, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.startDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.startDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.startDate, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.startDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.startDate, new { htmlAttributes = new { @class = "form-control datetimepicker" } })
+                    @Html.ValidationMessageFor(model => model.startDate, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.endDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.endDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.endDate, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.endDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.endDate, new { htmlAttributes = new { @class = "form-control datetimepicker" } })
+                    @Html.ValidationMessageFor(model => model.endDate, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.responsable, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.responsable, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.responsable, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.responsable, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.responsable, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.responsable, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.coffee, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.coffee, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.coffee, "", new { @class = "text-danger" })
+            <div class="form-group">
+                <label class="control-label col-md-2">Precisa de café?</label>
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        <label><input type="checkbox" value="" data-bind="checked: hasCoffee">Sim</label>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+            <div class="form-group" data-bind="visible: hasCoffee">
+                <label class="control-label col-md-2">Para quantas pessoas?</label>
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.coffee, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.coffee, "", new { @class = "text-danger" })
+                </div>
             </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+
+            <input type="hidden" name="branch_fk" data-bind="value: selectedBranch" />
+            <input type="hidden" name="room_fk" data-bind="value: selectedRoom" />
         </div>
     </div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Voltar para a lista", "Index")
 </div>
+
+<script type="text/javascript">
+    var ViewBagBranches = @Html.Raw(Json.Encode(@ViewBag.branches));
+    var ViewBagRooms = @Html.Raw(Json.Encode(@ViewBag.rooms));
+    var ModelSelectedBranch = @(@Model == null ? 0 : @Model.branch_fk);
+    var ModelSelectedRoom = @(@Model == null ? 0 : @Model.room_fk);
+    var ModelNeedCoffee = '@(@Model == null ? false : ((@Model.coffee == null || @Model.coffee == 0) ? false : true))';
+    ModelNeedCoffee = ModelNeedCoffee === 'True';
+    var ModelIsRoomFree = '@ViewBag.IsRoomFree';
+
+    if (ModelIsRoomFree === 'False')
+        toastr.warning("Esta sala já está reservada neste horário!");
+</script>

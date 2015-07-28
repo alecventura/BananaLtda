@@ -1,4 +1,4 @@
-﻿function CreateReservationViewModel() {
+﻿function CreateEditReservationViewModel() {
     var self = this;
     self.branches = ko.observableArray(ViewBagBranches)
     self.rooms = ko.observableArray(ViewBagRooms);
@@ -24,7 +24,7 @@
 
 
 $(document).ready(function () {
-    ko.applyBindings(new CreateReservationViewModel(), document.getElementById('create-reservation'));
+    ko.applyBindings(new CreateEditReservationViewModel(), document.getElementById('create-reservation'));
 
     $('.datetimepicker').datetimepicker(); //Initialise any date pickers
 });

@@ -16,14 +16,14 @@ namespace BananaLtda.Controllers
     {
         private bananaltdaEntities db = new bananaltdaEntities();
 
-        // GET: Reservation
+        // GET: ReservationMVC
         public ActionResult Index()
         {
             var bookings = db.bookings.Include(b => b.branch).Include(b => b.room);
             return View(bookings.ToList());
         }
 
-        // GET: Reservation/Details/5
+        // GET: ReservationMVC/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -38,7 +38,7 @@ namespace BananaLtda.Controllers
             return View(booking);
         }
 
-        // GET: Reservation/Create
+        // GET: ReservationMVC/Create
         public ActionResult Create()
         {
             ViewBag.branches = LoadBranches();
@@ -48,14 +48,14 @@ namespace BananaLtda.Controllers
             return View();
         }
 
-        // POST: Reservation/Create
+        // POST: ReservationMVC/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "id,branch_fk,room_fk,startDate,endDate,responsable,description,coffee")] booking booking)
         {
+            ViewBag.IsRoomFree = true;
             if (ModelState.IsValid)
             {
-                ViewBag.IsRoomFree = true;
                 if (!IsRoomFree(booking))
                 {
                     ViewBag.IsRoomFree = false;
@@ -73,7 +73,7 @@ namespace BananaLtda.Controllers
             return View(booking);
         }
 
-        // GET: Reservation/Edit/5
+        // GET: ReservationMVC/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -85,28 +85,37 @@ namespace BananaLtda.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.branch_fk = new SelectList(db.branches, "id", "name", booking.branch_fk);
-            ViewBag.room_fk = new SelectList(db.rooms, "id", "name", booking.room_fk);
+            ViewBag.branches = LoadBranches();
+            ViewBag.rooms = LoadRooms();
+            ViewBag.IsRoomFree = true;
             return View(booking);
         }
 
-        // POST: Reservation/Edit/5
+        // POST: ReservationMVC/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "id,branch_fk,room_fk,startDate,endDate,responsable,description,coffee")] booking booking)
         {
+            ViewBag.IsRoomFree = true;
             if (ModelState.IsValid)
             {
-                db.Entry(booking).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (!IsRoomFree(booking))
+                {
+                    ViewBag.IsRoomFree = false;
+                }
+                else
+                {
+                    db.Entry(booking).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
-            ViewBag.branch_fk = new SelectList(db.branches, "id", "name", booking.branch_fk);
-            ViewBag.room_fk = new SelectList(db.rooms, "id", "name", booking.room_fk);
+            ViewBag.branches = LoadBranches();
+            ViewBag.rooms = LoadRooms();
             return View(booking);
         }
 
-        // GET: Reservation/Delete/5
+        // GET: ReservationMVC/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -121,7 +130,7 @@ namespace BananaLtda.Controllers
             return View(booking);
         }
 
-        // POST: Reservation/Delete/5
+        // POST: ReservationMVC/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

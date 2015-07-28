@@ -248,7 +248,7 @@
     <Content Include="Scripts\utils\utils.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\ReservationKO\Index.js" />
-    <Content Include="Views\ReservationMVC\Create.js" />
+    <Content Include="Views\ReservationMVC\CreateEdit.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

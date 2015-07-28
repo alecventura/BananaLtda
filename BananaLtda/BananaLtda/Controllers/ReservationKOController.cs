@@ -14,12 +14,14 @@ namespace BananaLtda.Controllers
     {
         private bananaltdaEntities db = new bananaltdaEntities();
 
+        // GET: ReservationKO/Index
         public ActionResult Index()
         {
             return View();
         }
 
         // GET: Retorna a lista com todas as reservas.
+        // GET: ReservationKO/GetList
         public JsonResult GetList(int limit, int offset)
         {
             List<booking> bookingsFromModel = db.bookings.ToList();
@@ -33,6 +35,7 @@ namespace BananaLtda.Controllers
         }
 
         // POST: Web-services para criar uma reserva.
+        // POST: ReservationKO/Save
         [HttpPost]
         public JsonResult Save(Reservation json)
         {
@@ -72,7 +75,7 @@ namespace BananaLtda.Controllers
             }
         }
 
-        // POST: Book/Delete/5
+        // POST: ReservationKO/Delete/5
         [HttpPost]
         public JsonResult Delete(int id)
         {
