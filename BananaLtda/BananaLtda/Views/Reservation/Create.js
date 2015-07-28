@@ -5,7 +5,7 @@
     self.selectedBranch = ko.observable(ModelSelectedBranch);
     self.selectedRoom = ko.observable(ModelSelectedRoom);
 
-    self.hasCoffee = ko.observable();
+    self.hasCoffee = ko.observable(ModelNeedCoffee);
 
     self.availableRooms = ko.computed(function () {
         var array = [];

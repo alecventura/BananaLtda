@@ -13,7 +13,7 @@
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
-                @Html.LabelFor(model => model.branch_fk, "branch_fk", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.branch_fk, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <select id="branch_fk" class="form-control" data-bind="options: $root.branches, optionsValue:'id', optionsText: 'name', value: $root.selectedBranch, optionsCaption: 'Choose a Branch'"></select>
                     @Html.ValidationMessageFor(model => model.branch_fk, "", new { @class = "text-danger" })
@@ -21,7 +21,7 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.room_fk, "room_fk", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.room_fk, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     <select id="room_fk" class="form-control" data-bind="disable: !$root.hasSelectedBranch(), options: $root.availableRooms, optionsValue:'id', optionsText: 'name', value: $root.selectedRoom, optionsCaption: 'Choose a Room'"></select>
                     @Html.ValidationMessageFor(model => model.room_fk, "", new { @class = "text-danger" })
@@ -97,13 +97,8 @@
 <script type="text/javascript">
     var ViewBagBranches = @Html.Raw(Json.Encode(@ViewBag.branches));
     var ViewBagRooms = @Html.Raw(Json.Encode(@ViewBag.rooms));
-    @if(Model != null)
-    {
-        var ModelSelectedBranch = @Model.branch_fk;
-        var ModelSelectedRoom =@Model.room_fk;
-    }
-    if(typeof ModelSelectedBranch == 'undefined')
-        ModelSelectedBranch = null;
-    if(typeof ModelSelectedRoom == 'undefined')
-        ModelSelectedRoom = null;
+    var ModelSelectedBranch = @(@Model == null ? 0 : @Model.branch_fk);
+    var ModelSelectedRoom = @(@Model == null ? 0 : @Model.room_fk);
+    var ModelNeedCoffee = '@(@Model == null ? false : ((@Model.coffee == null || @Model.coffee == 0) ? false : true))';
+    ModelNeedCoffee = ModelNeedCoffee === 'True';
 </script>
