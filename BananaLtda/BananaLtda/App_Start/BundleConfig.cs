@@ -25,11 +25,15 @@ namespace BananaLtda
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
-                    "~/Content/default.css",
-                    "~/Content/default.date.css",
-                    "~/Content/default.time.css",
+                      "~/Content/default.css",
+                      "~/Content/default.date.css",
+                      "~/Content/default.time.css",
                       "~/Content/bootstrap-datetimepicker.css",
+                      "~/Content/fullcalendar.min.css",
                       "~/Content/toastr.min.css"));
+
+            bundles.Add(new StyleBundle("~/Content/print").Include(
+                      "~/Content/fullcalendar.print.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
                       "~/Scripts/knockout-3.3.0.debug.js", "~/Scripts/knockout.mapping-latest.debug.js"));
@@ -68,10 +72,14 @@ namespace BananaLtda
                       "~/Scripts/utils/utils.js",
                       "~/Scripts/utils/paginator.js"));
 
-            // Scripts especificos de cada pagina:
+            bundles.Add(new ScriptBundle("~/bundles/fullcalendar").Include(
+                      "~/Scripts/utils/fullcalendar.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/book").Include(
-                      "~/View/Home/book.js"));
         }
+    }
+
+    public class BundlesFormats
+    {
+        public const string PRINT = @"<link href=""{0}"" rel=""stylesheet"" type=""text/css"" media=""print"" />";
     }
 }

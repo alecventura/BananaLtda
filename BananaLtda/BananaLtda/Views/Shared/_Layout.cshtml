@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Banana Ltda - Sistema de Reservas </title>
     @Styles.Render("~/Content/css")
+    @Styles.RenderFormat(BundlesFormats.PRINT, "~/bundles/Content/print")
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/toastr")
@@ -15,9 +16,9 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Calendar", "Index", "Calendar")</li>
-                    <li>@Html.ActionLink("Reservation - KO", "Index", "ReservationKO")</li>
-                    <li>@Html.ActionLink("Reservation - MVC", "Index", "ReservationMVC")</li>
+                    <li>@Html.ActionLink("Calendário", "Calendar", "Home")</li>
+                    <li>@Html.ActionLink("Lista de Reserva - KO", "Index", "ReservationKO")</li>
+                    <li>@Html.ActionLink("Lista de Reserva - MVC", "Index", "ReservationMVC")</li>
                 </ul>
             </div>
         </div>
@@ -38,6 +39,7 @@
     @Scripts.Render("~/bundles/pickadate")
     @Scripts.Render("~/bundles/bootbox")
     @Scripts.Render("~/bundles/datetimepicker")
+    @Scripts.Render("~/bundles/fullcalendar")
     @Scripts.Render("~/bundles/utils")
     @RenderSection("scripts", required: false)
 </body>

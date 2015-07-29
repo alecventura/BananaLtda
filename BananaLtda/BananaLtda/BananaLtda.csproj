@@ -170,6 +170,9 @@
     <Content Include="Content\default.date.css" />
     <Content Include="Content\default.time.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\fullcalendar.css" />
+    <Content Include="Content\fullcalendar.min.css" />
+    <Content Include="Content\fullcalendar.print.css" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
@@ -228,6 +231,10 @@
     <Content Include="Scripts\knockoutCustomBindings\knockout-withComponent.js" />
     <Content Include="Scripts\knockout.mapping-latest.debug.js" />
     <Content Include="Scripts\knockout.mapping-latest.js" />
+    <Content Include="Scripts\utils\fullcalendar.js" />
+    <Content Include="Scripts\utils\fullcalendar.min.js" />
+    <Content Include="Scripts\utils\gcal.js" />
+    <Content Include="Scripts\utils\lang-all.js" />
     <Content Include="Scripts\utils\legacy.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\utils\moment-with-locales.js" />
@@ -270,6 +277,7 @@
     <Content Include="Views\ReservationMVC\Create.cshtml" />
     <Content Include="Views\ReservationMVC\Delete.cshtml" />
     <Content Include="Views\ReservationMVC\Edit.cshtml" />
+    <Content Include="Views\Home\Calendar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
