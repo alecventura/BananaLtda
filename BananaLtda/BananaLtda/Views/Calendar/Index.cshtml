@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Calendar";
+}
+
+@section scripts{
+    <script src="~/Views/Calendar/Index.js"></script>
+}
+
+<div id="calendar-body">
+    <h2>Calendário</h2>
+    <div id='calendar'></div>
+
+    @* Modal para criação ou edição de reservas *@
+    <div class="modal" data-bind="isVisible: $data.isVisible" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <button type="button" class="close" data-bind="toggle: isVisible" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <div class="modal-content" id="modal-content">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var ViewBagEvents = @Html.Raw(Json.Encode(@ViewBag.events));
+</script>

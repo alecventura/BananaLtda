@@ -16,10 +16,5 @@ namespace BananaLtda.Controllers
             return View();
         }
 
-        public ActionResult Calendar()
-        {
-            return View();
-        }
-
     }
 }

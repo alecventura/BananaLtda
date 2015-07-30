@@ -24,14 +24,19 @@ namespace BananaLtda.Controllers
         // GET: ReservationKO/GetList
         public JsonResult GetList(int limit, int offset)
         {
-            List<booking> bookingsFromModel = db.bookings.ToList();
+            if (limit == null || limit == 0)
+                limit = 100;
+
+            offset = (offset != null ? offset : 0);
+
+            List<booking> bookingsFromModel = db.bookings.Skip(offset).Take(limit).ToList();
             List<Reservation> reservationsJSON = new List<Reservation>();
 
             foreach (var item in bookingsFromModel)
             {
                 reservationsJSON.Add(Reservation.mapToJSON(item));
             }
-            return Json(new Pagination(reservationsJSON.Cast<GenericItemJSON>().ToList(), bookingsFromModel.Count, offset), JsonRequestBehavior.AllowGet);
+            return Json(new Pagination(reservationsJSON.Cast<GenericItemJSON>().ToList(), db.bookings.ToList().Count, offset), JsonRequestBehavior.AllowGet);
         }
 
         // POST: Web-services para criar uma reserva.

@@ -1,0 +1,161 @@
+﻿@model BananaLtda.Models.booking
+
+@*@section scripts{
+        <script src="~/Views/Calendar/_CreateEvent.js"></script>
+    }*@
+
+<div class="modal-header">
+    <h4 class="modal-title">Reserve uma sala</h4>
+</div>
+<div class="modal-body">
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(model => model.branch_fk, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select id="branch_fk" class="form-control" data-bind="options: $root.branches, optionsValue:'id', optionsText: 'name', value: $root.selectedBranch, optionsCaption: 'Choose a Branch'"></select>
+                @Html.ValidationMessageFor(model => model.branch_fk, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.room_fk, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select id="room_fk" class="form-control" data-bind="disable: !$root.hasSelectedBranch(), options: $root.availableRooms, optionsValue:'id', optionsText: 'name', value: $root.selectedRoom, optionsCaption: 'Choose a Room'"></select>
+                @Html.ValidationMessageFor(model => model.room_fk, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.startDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.startDate, new { htmlAttributes = new { @class = "form-control datetimepicker" } })
+                @Html.ValidationMessageFor(model => model.startDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.endDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.endDate, new { htmlAttributes = new { @class = "form-control datetimepicker" } })
+                @Html.ValidationMessageFor(model => model.endDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.responsable, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.responsable, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.responsable, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.description, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Precisa de café?</label>
+            <div class="col-md-10">
+                <div class="checkbox">
+                    <label><input type="checkbox" value="" data-bind="checked: $root.hasCoffee">Sim</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" data-bind="visible: $root.hasCoffee">
+            <label class="control-label col-md-2">Para quantas pessoas?</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.coffee, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.coffee, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" name="branch_fk" data-bind="value: $root.selectedBranch" />
+    <input type="hidden" name="room_fk" data-bind="value: $root.selectedRoom" />
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-bind="toggle: $root.isVisible">Fechar</button>
+    <button type="submit" class="btn btn-primary" data-bind="click: $root.onSaveClicked">Salvar</button>
+</div>
+<script type="text/javascript">
+    var ViewBagBranches = @Html.Raw(Json.Encode(@ViewBag.branches));
+    var ViewBagRooms = @Html.Raw(Json.Encode(@ViewBag.rooms));
+    var ModelSelectedBranch = @(@Model == null ? 0 : @Model.branch_fk);
+    var ModelSelectedRoom = @(@Model == null ? 0 : @Model.room_fk);
+    var ModelNeedCoffee = '@(@Model == null ? false : ((@Model.coffee == null || @Model.coffee == 0) ? false : true))';
+    ModelNeedCoffee = ModelNeedCoffee === 'True';
+    var ModelIsRoomFree = '@ViewBag.IsRoomFree';
+
+    if (ModelIsRoomFree === 'False')
+        toastr.warning("Esta sala já está reservada neste horário!");
+
+
+
+    var newReservation = {
+        'branch_fk': null,
+        'room_fk': null,
+        'startdate': moment().startOf('day').toDate(), // Inicia com a data atual
+        'enddate': moment().startOf('day').toDate(),
+        'starttime': 480,  //Armazena a hora em minutos a partir da meia noite (Ex: meia noite é 0 minutos, meia noite e meia é 30min e por ai vai).
+        'endtime': 480, // 480  representa 8h da manha
+        'responsible': "",
+        'description': "",
+        'coffee': 0,
+        'id': -1
+    }
+
+    function CalendarViewModel() {
+        var self = this;
+        self.branches = ko.observableArray(ViewBagBranches)
+        self.rooms = ko.observableArray(ViewBagRooms);
+        self.selectedBranch = ko.observable(ModelSelectedBranch);
+        self.selectedRoom = ko.observable(ModelSelectedRoom);
+        self.isVisible = ko.observable(false);
+
+        self.hasCoffee = ko.observable(ModelNeedCoffee);
+
+        self.availableRooms = ko.computed(function () {
+            var array = [];
+            _.each(self.rooms(), function (item) {
+                if (item.branch_fk == self.selectedBranch()) {
+                    array.push(item);
+                }
+            })
+            return array;
+        });
+
+        self.hasSelectedBranch = ko.computed(function () {
+            return self.selectedBranch() != null && self.selectedBranch() > 0;
+        });
+
+        self.onSaveClicked = function () {
+            var self2 = $(this);
+            $.ajax({
+                url: '/Calendar/CreateEvent',
+                type: 'POST',
+                data: self2.closest('form').serialize(),
+                success: function(data) {
+                    if(data.success == true) {
+                        $('.modal').modal('hide');
+                        location.reload(false)
+                    } else {
+                        $('#modal-content').html(data);
+                    }
+                }
+            });
+        }
+    }
+
+
+    $(document).ready(function () {
+        ko.applyBindings(new CalendarViewModel(), document.getElementById('modal-content'));
+
+        $('.datetimepicker').datetimepicker(); //Initialise any date pickers
+    });
+</script>

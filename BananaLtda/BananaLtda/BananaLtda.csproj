@@ -119,6 +119,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\Answer.cs" />
+    <Compile Include="Controllers\CalendarController.cs" />
     <Compile Include="Controllers\ReservationKOController.cs" />
     <Compile Include="Controllers\BranchesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -150,6 +151,7 @@
       <DependentUpon>BananaModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\JSONs\Branch.cs" />
+    <Compile Include="Models\JSONs\Event.cs" />
     <Compile Include="Models\JSONs\GenericItemJSON.cs" />
     <Compile Include="Models\JSONs\Pagination.cs" />
     <Compile Include="Models\JSONs\Reservation.cs" />
@@ -254,6 +256,8 @@
     <Content Include="Scripts\utils\underscore.min.js" />
     <Content Include="Scripts\utils\utils.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Calendar\Index.js" />
+    <Content Include="Views\Calendar\_CreateEvent.js" />
     <Content Include="Views\ReservationKO\Index.js" />
     <Content Include="Views\ReservationMVC\CreateEdit.js" />
     <Content Include="Web.config">
@@ -277,7 +281,8 @@
     <Content Include="Views\ReservationMVC\Create.cshtml" />
     <Content Include="Views\ReservationMVC\Delete.cshtml" />
     <Content Include="Views\ReservationMVC\Edit.cshtml" />
-    <Content Include="Views\Home\Calendar.cshtml" />
+    <Content Include="Views\Calendar\Index.cshtml" />
+    <Content Include="Views\Calendar\_CreateEvent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

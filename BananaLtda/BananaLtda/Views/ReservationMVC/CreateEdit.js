@@ -24,7 +24,7 @@
 
 
 $(document).ready(function () {
-    ko.applyBindings(new CreateEditReservationViewModel(), document.getElementById('create-reservation'));
+    ko.applyBindings(new CreateEditReservationViewModel(), document.getElementById('reservation-body'));
 
     $('.datetimepicker').datetimepicker(); //Initialise any date pickers
 });

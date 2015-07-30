@@ -189,7 +189,7 @@ namespace BananaLtda.Controllers
                         select b;
 
             // Se só tiver o próprio id naquele horario então deixa atualizar
-            if (reservation.id != null && reservation.id > 0)
+            if (reservation.id > 0)
             {
                 query = query.Where(x => x.id != reservation.id);
             }
