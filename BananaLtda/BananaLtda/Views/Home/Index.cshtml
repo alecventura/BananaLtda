@@ -10,17 +10,21 @@
 <div class="row">
     <div class="col-md-4">
         <h2>Calendário</h2>
-        <p>In calendar you can choose when you want to reserve a room.</p>
+        <p>Uma implementação básica do calendário que achei em: http://fullcalendar.io/ </p>
+        <p>Foi implementado o básico como adicionar uma reserva clicando-se em um dia, ou editar uma reserva clicando-se em alguma existente.</p>
+        <p>Mas muito mais pode ser feito utilizando esse calendário.</p>
         <p>@Html.ActionLink("Calendário", "Index", "Calendar")</p>
     </div>
     <div class="col-md-4">
         <h2>Lista de Reserva - KO</h2>
-        <p>List or search for a reserve.</p>
+        <p>Aqui foi implementado uma lista de reservas utilizando-se html + knockout.js.</p>
+        <p>Foi a primeira versão feita e sua deficiência é a dificuldade de se tratar os erros de validação.</p>
         <p>@Html.ActionLink("Lista de Reserva - KO", "Index", "ReservationKO")</p>
     </div>
     <div class="col-md-4">
         <h2>Lista de Reserva - MVC</h2>
-        <p>List or search for a reserve.</p>
+        <p>Aqui foi implementado uma lista de reservas utilizando-se ASP.NET MVC 5 + knockout.js.</p>
+        <p>Foi a segunda versão e a vantagem é a facilidade de tratar os erros de validação.</p>
         <p>@Html.ActionLink("Lista de Reserva - MVC", "Index", "ReservationMVC")</p>
     </div>
 </div>

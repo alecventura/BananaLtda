@@ -16,24 +16,37 @@ namespace BananaLtda.Controllers
         public ActionResult Index()
         {
             //// Pega a lista de reservas futuras e disponibiliza para a view
-            //var query = from b in db.bookings
-            //            where b.startDate > DateTime.Now
-            //            select b;
-
-            //ViewBag.events = Event.map(query.ToList());
-
             ViewBag.events = Event.map(db.bookings.ToList());
             return View();
         }
 
 
-        // GET: Calendar/CreateEvent
-        public ActionResult CreateEvent()
+        // POST: Calendar/OpenModalCreate
+        [HttpPost]
+        public ActionResult OpenModalCreate(DateTime start)
         {
+            booking b = new booking();
+            b.startDate = start;
+            b.endDate = start.AddMinutes(30);
+            b.branch_fk = 0;
+            b.room_fk = 0;
+
             ViewBag.branches = LoadBranches();
             ViewBag.rooms = LoadRooms();
             ViewBag.IsRoomFree = true;
-            return PartialView("_CreateEvent");
+            return PartialView("_CreateEvent", b);
+        }
+
+        // POST: Calendar/OpenModalEdit
+        [HttpPost]
+        public ActionResult OpenModalEdit(int id)
+        {
+            booking b = db.bookings.Where(i => i.id == id).Single();
+
+            ViewBag.branches = LoadBranches();
+            ViewBag.rooms = LoadRooms();
+            ViewBag.IsRoomFree = true;
+            return PartialView("_CreateEvent", b);
         }
 
         // POST: Calendar/CreateEvent

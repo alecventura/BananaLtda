@@ -4,10 +4,10 @@
     'startdate': moment().startOf('day').toDate(), // Inicia com a data atual
     'enddate': moment().startOf('day').toDate(),
     'starttime': 480,  //Armazena a hora em minutos a partir da meia noite (Ex: meia noite é 0 minutos, meia noite e meia é 30min e por ai vai).
-    'endtime': 480, // 480  representa 8h da manha
+    'endtime': 540, // 480  representa 8h da manha
     'responsible': "",
     'description': "",
-    'coffee': 0,
+    'coffee': null,
     'id': -1
 }
 
@@ -24,19 +24,18 @@ var mapping = {
     }
 }
 
-var request = { 'limit': 10, 'offset': 0 }
-
 function BookViewModel() {
     var self = this;
     self.branches = ko.observableArray([])
     self.rooms = ko.observableArray([]);
     self.reservations = ko.observableArray([]);
-    self.request = ko.observable(ko.mapping.fromJS(request))
+    self.offset = ko.observable(0)
     self.isVisible = ko.observable(false);
     self.objModal = ko.observable(ko.mapping.fromJS(newReservation));
 
     self.hasCoffee = ko.observable(false);
 
+    // Esse computed carrega seta dinamicamente a lista de salas disponiveis na filiar após selecionar a filial
     self.linkedRooms = ko.computed(function () {
         var array = [];
         _.each(self.rooms(), function (item) {
@@ -47,10 +46,19 @@ function BookViewModel() {
         return array;
     });
 
+    // Retorna true se já foi selecionado uma filial, usado para controlar o disable do combo das salas.
     self.hasSelectedBranch = ko.computed(function () {
         return self.objModal().branch_fk() != null && self.objModal().branch_fk() > 0;
     });
 
+    // Metodo executado quando botão "Fazer uma reserva" for acionado
+    self.onCreateClicked = function () {
+        // Limpa os campos do modal
+        self.objModal(ko.mapping.fromJS(newReservation));
+        self.isVisible(true);
+    }
+
+    // Metodo executado quando o editar de algum item for clicado
     self.onEditClicked = function (item) {
         mapedObj = ko.mapping.fromJS(item, mapping);
         self.objModal(mapedObj);
@@ -59,7 +67,9 @@ function BookViewModel() {
         self.isVisible(true);
     }
 
+    // Metodo executado quando o excluir de algum item for clicado
     self.onRemoveClicked = function (item) {
+        // Modal de confirmação (utiliza o framework bootbox.js)
         bootbox.confirm("Tem certeza que deseja cancelar a reserva da sala=" + item.roomName + "?", function (result) {
             if (result) {
                 $.ajax({
@@ -68,7 +78,9 @@ function BookViewModel() {
                     contentType: "application/json; charset=utf-8",
                     dataType: 'json',
                     success: function (response) {
+                        // Após remover, recarrega a lista
                         self.searchReservations(0, false);
+                        // E mostra uma mensagem de sucesso (utiliza o framework toastr)
                         toastr.success("Reserva removida com sucesso!");
                     },
                     failure: function (response) {
@@ -83,6 +95,7 @@ function BookViewModel() {
 
     }
 
+    // Metodo executado quando botão "Salvar" dentro do modal for acionado
     self.onSaveClicked = function () {
         utils.clearErrors();
         data = ko.mapping.toJS(self.objModal);
@@ -104,7 +117,7 @@ function BookViewModel() {
                         self.searchReservations(0, false);
                         self.isVisible(false);
                         $('.modal-backdrop').remove();
-                        toastr.success("Reserva efetuada!");
+                        toastr.success("Salvo com sucesso!");
                     } else {
                         toastr.warning(response.message)
                     }
@@ -119,18 +132,14 @@ function BookViewModel() {
         });
     }
 
-    self.mountRequest = function () {
-        return JSON.stringify({ 'request': ko.mapping.toJS(self.request) });
-    }
-
-    self.searchReservations = function (offset, showmessage) {
-        self.request().offset(offset);
+    // Carrega a lista de reservas
+    self.searchReservations = function (varoffset, showmessage) {
+        self.offset(varoffset);
         $.ajax({
             type: "GET",
-            url: "/ReservationKO/GetList?limit=" + self.request().limit() + "&offset=" + self.request().offset(),
+            url: "/ReservationKO/GetList?limit=10&offset=" + varoffset,
             dataType: 'json',
             success: function (data) {
-                self.request().offset(data.offset);
                 if (data.total === 0) {
                     if (showmessage) {
                         toastr.success("Nenhuma reserva encontrada!");
@@ -169,13 +178,14 @@ function BookViewModel() {
         return list;
     }
 
+    // Método que carrega a paginação
     self.generatePager = (function (self) {
         return function (data, self) {
             var pagerOpts;
             pagerOpts = {
                 div: $('#pager-reservations'),
                 offset: data.offset,
-                limit: self.request().limit(),
+                limit: 10,
                 total: data.total,
                 onClick: function (e, page) {
                     e.preventDefault();
@@ -188,6 +198,7 @@ function BookViewModel() {
         };
     })();
 
+    // ajax que carrega a lista de filiais
     self.loadBranches = function () {
         $.ajax({
             type: "GET",
@@ -205,6 +216,7 @@ function BookViewModel() {
         });
     }
 
+    // ajax que carrega a lista de salas
     self.loadRooms = function () {
         $.ajax({
             type: "GET",

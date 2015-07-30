@@ -24,12 +24,10 @@ namespace BananaLtda.Controllers
         // GET: ReservationKO/GetList
         public JsonResult GetList(int limit, int offset)
         {
-            if (limit == null || limit == 0)
+            if (limit == 0)
                 limit = 100;
 
-            offset = (offset != null ? offset : 0);
-
-            List<booking> bookingsFromModel = db.bookings.Skip(offset).Take(limit).ToList();
+            List<booking> bookingsFromModel = db.bookings.OrderBy(c => c.id).Skip(offset).Take(limit).ToList();
             List<Reservation> reservationsJSON = new List<Reservation>();
 
             foreach (var item in bookingsFromModel)
@@ -63,9 +61,10 @@ namespace BananaLtda.Controllers
                 }
 
                 if (reservation.id > 0)
-                    // Efetua a reserva da sala no banco de dados:
+                    // Atualiza a reserva da sala no banco de dados:
                     UpdateReservation(reservation);
                 else
+                    // Efetua a reserva da sala no banco de dados:
                     SaveReservation(reservation);
                 return Json(new Answer(200, "OK"));
             }
@@ -173,7 +172,7 @@ namespace BananaLtda.Controllers
                         select b;
 
             // Se só tiver o próprio id naquele horario então deixa atualizar
-            if (reservation.id != null && reservation.id > 0)
+            if (reservation.id > 0)
             {
                 query = query.Where(x => x.id != reservation.id);
             }

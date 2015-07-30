@@ -11,6 +11,7 @@
     'id': -1
 }
 
+// View model do modal de criar/editar eventos, é o javascript da página _CreateEvent.cshtml
 function CreateEventViewModel(isVisible) {
     var self = this;
     self.branches = ko.observableArray(ViewBagBranches)
@@ -79,6 +80,7 @@ function CreateEventViewModel(isVisible) {
     };
 }
 
+// View model da página Index.cshtml, reponsável por renderizar e popular o calendário
 function CalendarViewModel() {
     var self = this;
 
@@ -86,8 +88,6 @@ function CalendarViewModel() {
 
     self.applyBindingsOrReapply = function () {
         var element = document.getElementById('modal-content');
-
-        //ko.applyBindings(new CreateEventViewModel(self.isVisible), element);
 
         var vm = ko.dataFor(element);
         if (vm.branches != null) {
@@ -99,10 +99,36 @@ function CalendarViewModel() {
     };
 
     self.onCreateClicked = function (date) {
-        $.get('/Calendar/CreateEvent', function (data) {
-            $('#modal-content').html(data);
-            self.applyBindingsOrReapply();
-            self.isVisible(true);
+        // Formatando a data para retirar o bug do próprio framework que não suporta timezones no dayClick:
+        date = date.format();
+        var start = { start: date };
+        $.ajax({
+            url: '/Calendar/OpenModalCreate',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(start),
+            success: function (data) {
+                $('#modal-content').html(data);
+                $('.datetimepicker').datetimepicker(); // Inicializa os datetimepickers, tive que chamar depois de renderizar o modal, não sei porque não funcionou chamando na própria partial view
+                self.applyBindingsOrReapply();
+                self.isVisible(true);
+            }
+        });
+    }
+
+    self.onEditClicked = function (event) {
+        var id = { id: event.id };
+        $.ajax({
+            url: '/Calendar/OpenModalEdit',
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(id),
+            success: function (data) {
+                $('#modal-content').html(data);
+                $('.datetimepicker').datetimepicker();
+                self.applyBindingsOrReapply();
+                self.isVisible(true);
+            }
         });
     }
 
@@ -123,6 +149,7 @@ function CalendarViewModel() {
             timeFormat: 'H(:mm)',
             // Fim da configuração de lingua
             timezone: 'local',
+            eventStartEditable: false,
 
             media: "print",
             displayEventEnd: true,
@@ -136,7 +163,9 @@ function CalendarViewModel() {
             events: ViewBagEvents,
             dayClick: function (date, jsEvent, view) {
                 self.onCreateClicked(date);
-
+            },
+            eventClick: function (event, jsEvent, view) {
+                self.onEditClicked(event);
             }
         });
     }

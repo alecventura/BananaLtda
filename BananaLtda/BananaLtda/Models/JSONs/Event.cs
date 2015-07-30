@@ -7,6 +7,7 @@ namespace BananaLtda.Models.JSONs
 {
     public class Event
     {
+        public int id { get; set; }
         public DateTime start { get; set; }
         public DateTime end { get; set; }
         public string title { get; set; }
@@ -24,6 +25,7 @@ namespace BananaLtda.Models.JSONs
         internal static Event map(booking item)
         {
             Event e = new Event();
+            e.id = item.id;
             e.start = item.startDate;
             e.end = item.endDate;
             e.title = item.description;

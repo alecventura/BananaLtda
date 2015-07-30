@@ -103,6 +103,8 @@
     ModelNeedCoffee = ModelNeedCoffee === 'True';
     var ModelIsRoomFree = '@ViewBag.IsRoomFree';
 
+    // Após renderizar a variável ModelIsRoomFree que veio do controller, checka se é 'False' que é uma variavel do MVC != false para ver se teve erro de validação no horário.
     if (ModelIsRoomFree === 'False')
+        // Se teve, então apresenta uma mensagem de erro
         toastr.warning("Esta sala já está reservada neste horário!");
 </script>

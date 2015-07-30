@@ -6,7 +6,7 @@
 
 <button type="button" class="close" data-bind="toggle: isVisible" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 <div class="modal-header">
-    <h4 class="modal-title">Reserve uma sala</h4>
+    <h4 class="modal-title">RESERVA</h4>
 </div>
 <div class="modal-body">
     <div class="form-horizontal">
@@ -95,8 +95,4 @@
 
     if (ModelIsRoomFree === 'False')
         toastr.warning("Esta sala já está reservada neste horário!");
-
-    $(document).ready(function () {
-        $('.datetimepicker').datetimepicker(); //Initialise any date pickers
-    });
 </script>
